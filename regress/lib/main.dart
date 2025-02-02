@@ -1,5 +1,10 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
+
+import 'auth_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,14 +18,85 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Regress',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF2E5EAA),  // Professional deep blue
+          brightness: Brightness.light,
+          secondary: const Color(0xFF4CAF50),  // Positive green for progress
+          surface: Colors.white,
+        ),
         useMaterial3: true,
+        fontFamily: 'Roboto',  // Clean, readable font
+
+        // Text Theme
+        textTheme: const TextTheme(
+          displayLarge: TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
+          displayMedium: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
+          bodyMedium: TextStyle(fontSize: 16, height: 1.5),  // Optimal reading size
+          titleMedium: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+        ),
+
+        // Component Themes
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF2E5EAA),
+            foregroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
+
+        inputDecorationTheme: InputDecorationTheme(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
+          ),
+          filled: true,
+          fillColor: Colors.grey[50],
+          contentPadding: const EdgeInsets.all(16),
+        ),
+
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
+          elevation: 1,
+          titleTextStyle: TextStyle(
+            color: Colors.black87,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+
+        cardTheme: CardTheme(
+          elevation: 1,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(color: Colors.grey.shade100, width: 1),
+          ),
+        ),
+
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const LoginScreen(),
-    );
-  }
+      darkTheme: ThemeData.dark().copyWith(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF2E5EAA),
+          brightness: Brightness.dark,
+          secondary: const Color(0xFF4CAF50),
+        ),
+        cardTheme: CardTheme(
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+      ),
+      themeMode: ThemeMode.light,  // Force light mode for focus
+      home: AppProviders(
+        child: const LoginScreen(),
+      ),
+    );  }
 }
 
 class AppProviders extends StatelessWidget {
@@ -60,155 +136,109 @@ class MyButton extends StatelessWidget {
   }
 }
 
-class AuthProvider extends ChangeNotifier {
-  void login() {
-
-  }
-}
-
-class MyTextField extends StatelessWidget {
-  const MyTextField({super.key, required this.hintText, this.icon, this.isPassword});
-
-  final String hintText;
-  final Icon? icon;
-  final bool? isPassword;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      decoration: InputDecoration(
-        hintText: hintText,
-        icon: icon,
-        filled: true,
-        fillColor: Colors.grey[200],
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.green, width: 2),
-        ),
-      ),
-      obscureText: isPassword ?? false,
-    );
-  }
-}
-
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const MyTextField(
-              hintText: "Registration number",
-              icon: Icon(Icons.account_box),
-            ),
-            const SizedBox(height: 8),
-            const MyTextField(
-              hintText: "Password",
-              icon: Icon(Icons.lock),
-            ),
-            const SizedBox(height: 24),
-            MyButton(onPressed: () {}),
-          ],
-        ),
-      ),
+  InputDecoration buildInputDecoration(String placeholder, Icon icon) {
+    return InputDecoration(
+      hintText: placeholder,
+      icon: icon,
+      filled: true,
     );
   }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    final authProvider = context.watch<AuthProvider>();
+
+    if (authProvider.errorMessage != null && !authProvider.hasShownError) {
+      SchedulerBinding.instance.addPostFrameCallback(
+        (_) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(authProvider.errorMessage!),
+              backgroundColor: Theme.of(context).colorScheme.error,
+              duration: Duration(seconds: 3),
+            ),
+          );
+          authProvider.errorShown();
+        },
+      );
+    }
+
+    if (authProvider.loading) {
+    } else {}
+
     return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Form(
+              key: authProvider.formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TextFormField(
+                    decoration: buildInputDecoration(
+                      "Registration number",
+                      Icon(Icons.account_box),
+                    ),
+                    onChanged: context.read<AuthProvider>().onRegistrationNumberChanged,
+                    validator: authProvider.validate,
+                  ),
+                  const SizedBox(height: 8),
+                  TextFormField(
+                    decoration: buildInputDecoration(
+                      "Password",
+                      Icon(Icons.lock),
+                    ),
+                    obscureText: true,
+                    onChanged: context.read<AuthProvider>().onPasswordChanged,
+                    validator: authProvider.validate,
+                  ),
+                  const SizedBox(height: 24),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                    ),
+                    onPressed: authProvider.onButtonClick(),
+                    child: const Text("LOGIN", style: TextStyle(fontSize: 16)),
+                  )
+                ],
+              ),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
+          ),
+          if (authProvider.loading)
+            BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+              child: Container(
+                color: Colors.black54,
+                child: Center(
+                  child: Container(
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CircularProgressIndicator(),
+                        SizedBox(width: 20),
+                        Text("Loading..."),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            )
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
