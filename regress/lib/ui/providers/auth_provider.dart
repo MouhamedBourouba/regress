@@ -109,4 +109,8 @@ class AuthProvider extends ChangeNotifier {
     _isAuthenticated = false;
     notifyListeners();
   }
+
+  bool checkAuthentication() {
+    return authRepository.isAuthenticated();
+  }
 }

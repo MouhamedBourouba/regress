@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:regress/app/providers.dart';
+import 'package:regress/ui/providers/auth_provider.dart';
+import 'package:regress/ui/screens/home_screen.dart';
 import 'package:regress/ui/screens/login_screen.dart';
 
 final brightness = Brightness.light;
@@ -48,7 +51,6 @@ class RegessApp extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             backgroundColor: primary,
             foregroundColor: Colors.white,
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
@@ -89,7 +91,9 @@ class RegessApp extends StatelessWidget {
       ),
       themeMode: ThemeMode.light,
       home: AppProviders(
-        child: const LoginScreen(),
+        child: Builder(builder: (context) {
+          return context.read<AuthProvider>().checkAuthentication() ? HomeScreen() : LoginScreen();
+        }),
       ),
     );
   }

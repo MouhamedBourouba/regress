@@ -1,8 +1,8 @@
-import 'package:regress/data/models/auth_response_entity.dart';
+import 'package:regress/data/models/user_ids.dart';
 import 'package:regress/generated/json/base/json_convert_content.dart';
 
-AuthResponseEntity $AuthResponseEntityFromJson(Map<String, dynamic> json) {
-  final AuthResponseEntity authResponseEntity = AuthResponseEntity();
+UserIds $AuthResponseEntityFromJson(Map<String, dynamic> json) {
+  final UserIds authResponseEntity = UserIds();
   final String? expirationDate = jsonConvert.convert<String>(json['expirationDate']);
   if (expirationDate != null) {
     authResponseEntity.expirationDate = expirationDate;
@@ -34,7 +34,7 @@ AuthResponseEntity $AuthResponseEntityFromJson(Map<String, dynamic> json) {
   return authResponseEntity;
 }
 
-Map<String, dynamic> $AuthResponseEntityToJson(AuthResponseEntity entity) {
+Map<String, dynamic> $AuthResponseEntityToJson(UserIds entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['expirationDate'] = entity.expirationDate;
   data['token'] = entity.token;
@@ -46,8 +46,8 @@ Map<String, dynamic> $AuthResponseEntityToJson(AuthResponseEntity entity) {
   return data;
 }
 
-extension AuthResponseEntityExtension on AuthResponseEntity {
-  AuthResponseEntity copyWith({
+extension AuthResponseEntityExtension on UserIds {
+  UserIds copyWith({
     String? expirationDate,
     String? token,
     int? userId,
@@ -56,7 +56,7 @@ extension AuthResponseEntityExtension on AuthResponseEntity {
     int? etablissementId,
     String? userName,
   }) {
-    return AuthResponseEntity()
+    return UserIds()
       ..expirationDate = expirationDate ?? this.expirationDate
       ..token = token ?? this.token
       ..userId = userId ?? this.userId

@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:regress/ui/providers/auth_provider.dart';
+import 'package:regress/ui/screens/home_screen.dart';
 
-final maxFormWidth = 500.0;
+final maxFormWidth = 550.0;
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -13,10 +14,11 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authProvider = context.watch<AuthProvider>();
+
     if (authProvider.errorMessage != null && !authProvider.hasShownError) {
       SchedulerBinding.instance.addPostFrameCallback(
         (_) {
-          ScaffoldMessenger.of(context).hideCurrentSnackBar(reason: SnackBarClosedReason.timeout);
+          ScaffoldMessenger.of(context).hideCurrentSnackBar(reason: SnackBarClosedReason.hide);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(authProvider.errorMessage!),
@@ -28,6 +30,16 @@ class LoginScreen extends StatelessWidget {
       );
     }
 
+    if (authProvider.isAuthenticated) {
+      SchedulerBinding.instance.addPostFrameCallback(
+        (timeStamp) {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => HomeScreen(),
+          ));
+        },
+      );
+    }
+
     return Scaffold(
       body: Stack(
         children: [
@@ -35,13 +47,14 @@ class LoginScreen extends StatelessWidget {
             child: ConstrainedBox(
               constraints: BoxConstraints(maxWidth: maxFormWidth),
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(16.0),
                 child: MediaQuery.of(context).size.width > maxFormWidth
                     ? Card(
                         elevation: 10,
                         child: Padding(
-                            padding: const EdgeInsets.only(bottom: 28, left: 16, right: 16),
-                            child: _LoginForm()),
+                          padding: const EdgeInsets.all(16),
+                          child: _LoginForm(),
+                        ),
                       )
                     : _LoginForm(),
               ),
@@ -93,12 +106,23 @@ class _LoginForm extends StatelessWidget {
           children: [
             Image.asset(
               "assets/images/uni_logo.png",
-              height: 160,
+              height: 100,
             ),
+            const SizedBox(height: 8),
+            Text(
+              "Student Portal",
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 22,
+                    letterSpacing: 1.2,
+                  ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
             TextFormField(
               decoration: InputDecoration(
                 hintText: "Registration number",
-                icon: Icon(Icons.account_box),
+                prefixIcon: Icon(Icons.account_box),
               ),
               onChanged: authProvider.onRegistrationNumberChanged,
               validator: authProvider.validateRegistrationNumber,
@@ -108,27 +132,27 @@ class _LoginForm extends StatelessWidget {
             TextFormField(
               decoration: InputDecoration(
                 hintText: "Password",
-                icon: Icon(Icons.lock),
+                prefixIcon: Icon(Icons.lock),
                 suffixIcon: IconButton(
                   onPressed: authProvider.onVisibilityClicked,
                   icon:
                       authProvider.visibility ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
                 ),
               ),
-              obscureText: authProvider.visibility,
+              obscureText: !authProvider.visibility,
               onChanged: authProvider.onPasswordChanged,
               validator: authProvider.validatePassword,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.symmetric(vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                padding: EdgeInsets.symmetric(vertical: 16),
               ),
               onPressed: authProvider.onButtonClick(),
-              child: const Text("LOGIN", style: TextStyle(fontSize: 16)),
+              child: const Text("LOGIN"),
             )
           ],
         ),
