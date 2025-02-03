@@ -1,13 +1,19 @@
 import 'package:flutter/widgets.dart';
-import 'package:regress/progress_api.dart';
+import 'package:regress/app/di.dart';
+import 'package:regress/utils/utils.dart';
 
-import 'models/auth_request_entity.dart';
+import '../../models/auth_request_entity.dart';
 
 class AuthProvider extends ChangeNotifier {
+  final ProgressAPI progressAPI;
+
+  AuthProvider(this.progressAPI);
+
   bool _isAuthenticated = false;
   String? _errorMessage;
   bool _hasShownError = false;
   bool _loading = false;
+  bool _visibility = false;
   String _password = "";
   String _registrationNumber = "";
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -17,6 +23,8 @@ class AuthProvider extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
 
   bool get hasShownError => _hasShownError;
+
+  bool get visibility => _visibility;
 
   bool get loading => _loading;
 
@@ -38,7 +46,7 @@ class AuthProvider extends ChangeNotifier {
     _loading = true;
     notifyListeners();
 
-    final result = await ProgressAPI.authenticate(
+    final result = await progressAPI.login(
       AuthRequestEntity.make(_registrationNumber, _password),
     );
 
@@ -57,9 +65,21 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  String? validate(String? value) {
-    if ((value?.isNotEmpty ?? false) && (value?.length ?? 0) < 5) {
-      return 'Please enter your registration number';
+  String? validateRegistrationNumber(String? value) {
+    if (value == null) return null;
+
+    if (value.isNotEmpty && value.length < 5) {
+      return 'registration number too short';
+    } else if (!isNumeric(value)) {
+      return 'registration number cant have characters';
+    }
+
+    return null;
+  }
+
+  String? validatePassword(String? value) {
+    if ((value?.isNotEmpty ?? false) && (value?.length ?? 0) < 4) {
+      return 'Password is too short';
     }
     return null;
   }
@@ -77,7 +97,16 @@ class AuthProvider extends ChangeNotifier {
   }
 
   VoidCallback? onButtonClick() {
-    return _password.length >= 5 && _registrationNumber.length >= 5 ? _login : null;
+    return isNumeric(_registrationNumber) &&
+            _password.length >= 5 &&
+            _registrationNumber.length >= 5
+        ? _login
+        : null;
+  }
+
+  void onVisibilityClicked() {
+    _visibility = !_visibility;
+    notifyListeners();
   }
 
   void logout() {
