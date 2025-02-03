@@ -19,23 +19,25 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future<ResultDart<File, String>> getUserImage() async {
     if (_sp.containsKey(Constants.USER_IMAGE_PATH_KEY)) {
-      return File(_sp.getString(Constants.USER_IMAGE_PATH_KEY)!).toSuccess();
-    } else {
-      final userIds = _authRepository.getUserIds();
-      final base64EncodedImage = _progressAPI.getUserImage(userIds.uuid, userIds.token);
-
-      final res = await base64EncodedImage.fold<Future<ResultDart<File, String>>>(
-        (success) async {
-          final imageData = base64Decode(success);
-          final image = await saveImage(imageData, Constants.DEFAULT_USER_IMAGE_FILENAME);
-          _sp.setString(Constants.USER_IMAGE_PATH_KEY, image.path);
-          return image.toSuccess();
-        },
-        (error) async {
-          return error.toFailure();
-        },
-      );
-      return res;
+      final imageFile = File(_sp.getString(Constants.USER_IMAGE_PATH_KEY)!);
+      if (imageFile.existsSync()) {
+        return imageFile.toSuccess();
+      }
     }
+
+    final userIds = _authRepository.getUserIds();
+    final base64EncodedImage = await _progressAPI.getUserImage(userIds.uuid, userIds.token);
+
+    return base64EncodedImage.fold<Future<ResultDart<File, String>>>(
+      (success) async {
+        final imageData = base64Decode(success);
+        final image = await saveImage(imageData, Constants.DEFAULT_USER_IMAGE_FILENAME);
+        _sp.setString(Constants.USER_IMAGE_PATH_KEY, image.path);
+        return image.toSuccess();
+      },
+      (error) async {
+        return error.toFailure();
+      },
+    );
   }
 }
