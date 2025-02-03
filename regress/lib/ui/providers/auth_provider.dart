@@ -1,13 +1,11 @@
 import 'package:flutter/widgets.dart';
-import 'package:regress/app/di.dart';
+import 'package:regress/domain/repository/auth_repository.dart';
 import 'package:regress/utils/utils.dart';
 
-import '../../models/auth_request_entity.dart';
-
 class AuthProvider extends ChangeNotifier {
-  final ProgressAPI progressAPI;
+  AuthRepository authRepository;
 
-  AuthProvider(this.progressAPI);
+  AuthProvider(this.authRepository);
 
   bool _isAuthenticated = false;
   String? _errorMessage;
@@ -46,16 +44,13 @@ class AuthProvider extends ChangeNotifier {
     _loading = true;
     notifyListeners();
 
-    final result = await progressAPI.login(
-      AuthRequestEntity.make(_registrationNumber, _password),
-    );
+    final result = await authRepository.login(registrationNumber, password);
 
     result.fold(
       (success) {
         _isAuthenticated = true;
       },
       (failure) {
-        _isAuthenticated = false;
         _hasShownError = false;
         _errorMessage = failure;
       },
@@ -98,7 +93,7 @@ class AuthProvider extends ChangeNotifier {
 
   VoidCallback? onButtonClick() {
     return isNumeric(_registrationNumber) &&
-            _password.length >= 5 &&
+            _password.length >= 4 &&
             _registrationNumber.length >= 5
         ? _login
         : null;
@@ -109,9 +104,9 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void logout() {
+  void logout() async {
+    await authRepository.logout();
     _isAuthenticated = false;
-    _errorMessage = null;
     notifyListeners();
   }
 }

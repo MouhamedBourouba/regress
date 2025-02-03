@@ -1,5 +1,5 @@
+import 'package:regress/data/models/auth_response_entity.dart';
 import 'package:regress/generated/json/base/json_convert_content.dart';
-import 'package:regress/models/auth_response_entity.dart';
 
 AuthResponseEntity $AuthResponseEntityFromJson(Map<String, dynamic> json) {
   final AuthResponseEntity authResponseEntity = AuthResponseEntity();

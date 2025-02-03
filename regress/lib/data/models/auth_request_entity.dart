@@ -12,13 +12,6 @@ class AuthRequestEntity {
 
   AuthRequestEntity();
 
-  factory AuthRequestEntity.make(String username, String password) {
-    var authRequestEntity = AuthRequestEntity();
-    authRequestEntity.username = username;
-    authRequestEntity.password = password;
-    return  authRequestEntity;
-  }
-
   factory AuthRequestEntity.fromJson(Map<String, dynamic> json) => $AuthRequestEntityFromJson(json);
 
   Map<String, dynamic> toJson() => $AuthRequestEntityToJson(this);

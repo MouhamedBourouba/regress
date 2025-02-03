@@ -2,6 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:regress/app/providers.dart';
 import 'package:regress/ui/screens/login_screen.dart';
 
+final brightness = Brightness.light;
+
+final Color primary = Color(0xFF1565C0);
+final Color onPrimary = Colors.white;
+
+final Color secondary = Color(0xFFFFC107);
+final Color onSecondary = Colors.black;
+
+final Color error = Color(0xFFD32F2F);
+final Color onError = Colors.white;
+
+final Color surface = Colors.white;
+final Color onSurface = Colors.black87;
+
 class RegessApp extends StatelessWidget {
   const RegessApp({super.key});
 
@@ -11,11 +25,16 @@ class RegessApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Regress',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF2E5EAA), // Professional deep blue
-          brightness: Brightness.light,
-          secondary: const Color(0xFF4CAF50), // Positive green for progress
-          surface: Colors.blueGrey.shade100,
+        colorScheme: ColorScheme(
+          brightness: brightness,
+          primary: primary,
+          onPrimary: onPrimary,
+          secondary: secondary,
+          onSecondary: onSecondary,
+          error: error,
+          onError: onError,
+          surface: surface,
+          onSurface: onSurface,
         ),
         useMaterial3: true,
         fontFamily: 'Roboto',
@@ -27,7 +46,7 @@ class RegessApp extends StatelessWidget {
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF2E5EAA),
+            backgroundColor: primary,
             foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
             shape: RoundedRectangleBorder(

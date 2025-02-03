@@ -1,13 +1,12 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:regress/app/di.dart';
 import 'package:result_dart/result_dart.dart';
 
-import 'models/auth_request_entity.dart';
-import 'models/auth_response_entity.dart';
+import '../models/auth_request_entity.dart';
+import '../models/auth_response_entity.dart';
 
-class ProgressAPIImpl implements ProgressAPI {
+class ProgressAPI {
   static const _baseUrl = "https://progres.mesrs.dz/api";
 
   Future<ResultDart<AuthResponseEntity, String>> login(AuthRequestEntity authReq) async {
