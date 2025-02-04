@@ -1,26 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:regress/app/di.dart';
-import 'package:regress/domain/repository/user_data_repository.dart';
+import 'package:provider/provider.dart';
+import 'package:regress/ui/providers/user_provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    context.read<UserProvider>().loadData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Student Portal"),
-        actions: [
-          FutureBuilder(
-            future: gt.get<UserRepository>().getUserImage(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
-              } else {
-                return Image.file(snapshot.data!.getOrThrow());
-              }
-            },
-          )
+        title: Text("Dashboard"),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: "Dashboard",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.grade),
+            label: "Grades",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_box),
+            label: "Profile",
+          ),
         ],
       ),
     );

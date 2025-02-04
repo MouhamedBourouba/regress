@@ -9,6 +9,46 @@ import '../models/user_ids.dart';
 class ProgressAPI {
   static const _baseUrl = "https://progres.mesrs.dz/api";
 
+  Future<ResultDart<http.Response, String>> _get(
+    String token,
+    String path, [
+    Map<String, String>? headers,
+  ]) async {
+    final uri = Uri.parse("$_baseUrl/infos/$path");
+
+    headers ??= {};
+    headers['authorization'] = token;
+
+    try {
+      final response = await http.get(
+        uri,
+        headers: headers,
+      );
+
+      if (response.statusCode == 200) {
+        return response.toSuccess();
+      } else {
+        return ("Error: ${response.statusCode} - ${response.body}").toFailure();
+      }
+    } catch (e) {
+      return ("Error occurred: ${e.toString()}").toFailure();
+    }
+  }
+
+  // Base64 encoded
+  Future<ResultDart<String, Unit>> fetchUserImage(String userUuid, String jwtToken) =>
+      _get(jwtToken, "image/$userUuid").fold(
+        (res) => res.body.toSuccess(),
+        (error) => unit.toFailure(),
+      );
+
+  // Base64 encoded
+  Future<ResultDart<String, Unit>> fetchUniversityLogo(String jwtToken, String establishmentId) =>
+      _get(jwtToken, "logoEtablissement/$establishmentId").fold(
+        (res) => res.body.toSuccess(),
+        (error) => unit.toFailure(),
+      );
+
   Future<ResultDart<UserIds, String>> login(AuthRequestEntity authReq) async {
     Uri uri = Uri.parse("$_baseUrl/authentication/v1/");
 
@@ -27,34 +67,6 @@ class ProgressAPI {
       );
       if (response.statusCode == 200) {
         return (UserIds.fromJson(jsonDecode(response.body)).toSuccess());
-      } else {
-        return ("Error: ${response.statusCode} - ${response.body}").toFailure();
-      }
-    } catch (e) {
-      return ("Error occurred: ${e.toString()}").toFailure();
-    }
-  }
-
-  Future<ResultDart<String, String>> getUserImage(String userUuid, String jwtToken) async {
-    Uri uri = Uri.parse("$_baseUrl/infos/image/$userUuid");
-
-    // Stupid i know but this is how progres servers work
-    final headers = {
-      'Accept': 'application/json, text/plain, */*',
-      'Content-Type': 'application/json',
-      'Connection': 'Keep-Alive',
-      'Accept-Encoding': 'gzip',
-      'authorization': jwtToken,
-    };
-
-    try {
-      final response = await http.get(
-        uri,
-        headers: headers,
-      );
-
-      if (response.statusCode == 200) {
-        return response.body.toSuccess();
       } else {
         return ("Error: ${response.statusCode} - ${response.body}").toFailure();
       }

@@ -12,7 +12,7 @@ class Base64LocalImageCache {
 
   Base64LocalImageCache(this._sp);
 
-  String generateFileName(String key, {String ext = ".png"}) {
+  String _generateFileName(String key, {String ext = ".jpg"}) {
     final bytes = utf8.encode(key);
     final digest = md5.convert(bytes);
     return "${digest.toString()}$ext";
@@ -41,7 +41,7 @@ class Base64LocalImageCache {
     String cacheKey,
   ) async {
     final imageData = base64Decode(imageBase64);
-    final file = await _saveImageLocally(imageData, generateFileName(cacheKey));
+    final file = await _saveImageLocally(imageData, _generateFileName(cacheKey));
     _sp.setString(cacheKey, file.path);
     return file;
   }

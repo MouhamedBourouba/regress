@@ -1,5 +1,5 @@
 class Constants {
-  static const DEFAULT_USER_IMAGE_FILENAME = "user_img.jpg";
   static const USER_IDS_KEY = "user_id";
-  static const USER_IMAGE_PATH_KEY = "user_image";
+  static const USER_IMAGE_KEY = "user_image";
+  static const UNI_LOGO_KEY = "user_uni_image";
 }
