@@ -1,4 +1,4 @@
-import 'package:regress/data/models/user_ids.dart';
+import 'package:regress/data/models/student_ids_entity.dart';
 import 'package:result_dart/result_dart.dart';
 
 abstract class AuthRepository {
@@ -8,5 +8,5 @@ abstract class AuthRepository {
 
   bool isAuthenticated();
 
-  UserIds getUserIds();
+  StudentIdsEntity getUserIds();
 }

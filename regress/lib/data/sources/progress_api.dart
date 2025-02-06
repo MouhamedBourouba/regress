@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:regress/data/models/student_ids_entity.dart';
 import 'package:result_dart/result_dart.dart';
 
 import '../models/auth_request_entity.dart';
-import '../models/user_ids.dart';
 
 class ProgressAPI {
   static const _baseUrl = "https://progres.mesrs.dz/api";
@@ -49,7 +49,7 @@ class ProgressAPI {
         (error) => unit.toFailure(),
       );
 
-  Future<ResultDart<UserIds, String>> login(AuthRequestEntity authReq) async {
+  Future<ResultDart<StudentIdsEntity, String>> login(AuthRequestEntity authReq) async {
     Uri uri = Uri.parse("$_baseUrl/authentication/v1/");
 
     final headers = {
@@ -66,7 +66,7 @@ class ProgressAPI {
         body: authReq.toString(),
       );
       if (response.statusCode == 200) {
-        return (UserIds.fromJson(jsonDecode(response.body)).toSuccess());
+        return (StudentIdsEntity.fromJson(jsonDecode(response.body)).toSuccess());
       } else {
         return ("Error: ${response.statusCode} - ${response.body}").toFailure();
       }

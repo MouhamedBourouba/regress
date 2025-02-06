@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:regress/data/constants.dart';
 import 'package:regress/data/models/auth_request_entity.dart';
-import 'package:regress/data/models/user_ids.dart';
+import 'package:regress/data/models/student_ids_entity.dart';
 import 'package:regress/data/sources/progress_api.dart';
 import 'package:regress/domain/repository/auth_repository.dart';
 import 'package:result_dart/result_dart.dart';
@@ -44,8 +44,8 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  UserIds getUserIds() {
+  StudentIdsEntity getUserIds() {
     assert(isAuthenticated());
-    return UserIds.fromJson(jsonDecode(_sp.getString(Constants.USER_IDS_KEY)!));
+    return StudentIdsEntity.fromJson(jsonDecode(_sp.getString(Constants.USER_IDS_KEY)!));
   }
 }

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:regress/data/constants.dart';
-import 'package:regress/data/models/user_ids.dart';
+import 'package:regress/data/models/student_ids_entity.dart';
 import 'package:regress/data/sources/progress_api.dart';
 import 'package:regress/domain/repository/auth_repository.dart';
 import 'package:regress/domain/repository/user_data_repository.dart';
@@ -41,7 +41,7 @@ class UserRepositoryImpl implements UserRepository {
   Future<ResultDart<File, Unit>> getUserUniLogo() async => _fetchAndCacheImage(
         Constants.UNI_LOGO_KEY,
         () {
-          UserIds userIds = _authRepository.getUserIds();
+          StudentIdsEntity userIds = _authRepository.getUserIds();
           return _progressAPI.fetchUniversityLogo(
             userIds.token,
             userIds.etablissementId.toString(),
@@ -53,7 +53,7 @@ class UserRepositoryImpl implements UserRepository {
   Future<ResultDart<File, Unit>> getUserImage() => _fetchAndCacheImage(
         Constants.USER_IMAGE_KEY,
         () {
-          UserIds userIds = _authRepository.getUserIds();
+          StudentIdsEntity userIds = _authRepository.getUserIds();
           return _progressAPI.fetchUserImage(userIds.uuid, userIds.token);
         },
       );
