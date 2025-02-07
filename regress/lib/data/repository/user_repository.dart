@@ -1,8 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:regress/data/constants.dart';
+import 'package:regress/data/models/student_data_entity.dart';
 import 'package:regress/data/models/student_ids_entity.dart';
 import 'package:regress/data/sources/progress_api.dart';
+import 'package:regress/domain/models/Student.dart';
 import 'package:regress/domain/repository/auth_repository.dart';
 import 'package:regress/domain/repository/user_data_repository.dart';
 import 'package:result_dart/result_dart.dart';
@@ -51,10 +54,32 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<ResultDart<File, Unit>> getUserImage() => _fetchAndCacheImage(
-        Constants.USER_IMAGE_KEY,
+        Constants.STUDENT_IMAGE_KEY,
         () {
           StudentIdsEntity userIds = _authRepository.getUserIds();
           return _progressAPI.fetchUserImage(userIds.uuid, userIds.token);
         },
       );
+
+  @override
+  Future<ResultDart<Student, String>> getStudentData() async {
+    if (_sp.containsKey(Constants.STUDENT_DATA_KEY)) {
+      return Student.fromEntity(
+        StudentDataEntity.fromJson(
+          jsonDecode(_sp.getString(Constants.STUDENT_DATA_KEY)!),
+        ),
+      ).toSuccess();
+    }
+
+    final studentIds = _authRepository.getUserIds();
+    final result = _progressAPI.getStudentData(studentIds.token, studentIds.uuid);
+
+    return result.fold(
+      (success) {
+        _sp.setString(Constants.STUDENT_DATA_KEY, success.toString());
+        return Student.fromEntity(success).toSuccess();
+      },
+      (error) => error.toFailure(),
+    );
+  }
 }

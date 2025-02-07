@@ -26,7 +26,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
     res.onSuccess(
       (success) {
-        _sp.setString(Constants.USER_IDS_KEY, success.toString());
+        _sp.setString(Constants.STUDENT_IDS_KEY, success.toString());
       },
     );
 
@@ -35,17 +35,17 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<void> logout() async {
-    await _sp.remove(Constants.USER_IDS_KEY);
+    await _sp.remove(Constants.STUDENT_IDS_KEY);
   }
 
   @override
   bool isAuthenticated() {
-    return _sp.containsKey(Constants.USER_IDS_KEY);
+    return _sp.containsKey(Constants.STUDENT_IDS_KEY);
   }
 
   @override
   StudentIdsEntity getUserIds() {
     assert(isAuthenticated());
-    return StudentIdsEntity.fromJson(jsonDecode(_sp.getString(Constants.USER_IDS_KEY)!));
+    return StudentIdsEntity.fromJson(jsonDecode(_sp.getString(Constants.STUDENT_IDS_KEY)!));
   }
 }

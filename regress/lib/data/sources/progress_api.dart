@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:regress/data/models/student_data_entity.dart';
 import 'package:regress/data/models/student_ids_entity.dart';
 import 'package:result_dart/result_dart.dart';
 
@@ -49,14 +50,21 @@ class ProgressAPI {
         (error) => unit.toFailure(),
       );
 
+  Future<ResultDart<StudentDataEntity, String>> getStudentData(
+    String jwtToken,
+    String studentUuid,
+  ) =>
+      _get(jwtToken, "bac/$studentUuid/individu").fold(
+        (res) => StudentDataEntity.fromJson(jsonDecode(res.body)).toSuccess(),
+        (error) => error.toFailure(),
+      );
+
   Future<ResultDart<StudentIdsEntity, String>> login(AuthRequestEntity authReq) async {
     Uri uri = Uri.parse("$_baseUrl/authentication/v1/");
 
     final headers = {
       'Accept': 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
-      'Connection': 'Keep-Alive',
-      'Accept-Encoding': 'gzip',
     };
 
     try {
