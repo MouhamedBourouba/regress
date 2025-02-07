@@ -1,15 +1,14 @@
 import 'package:flutter/widgets.dart';
 import 'package:regress/domain/repository/auth_repository.dart';
+import 'package:regress/ui/providers/error_mixin.dart';
 import 'package:regress/utils/utils.dart';
 
-class AuthProvider extends ChangeNotifier {
+class AuthProvider extends ChangeNotifier with ErrorProviderMixin {
   AuthRepository authRepository;
 
   AuthProvider(this.authRepository);
 
   bool _isAuthenticated = false;
-  String? _errorMessage;
-  bool _hasShownError = false;
   bool _loading = false;
   bool _visibility = false;
   String _password = "";
@@ -17,10 +16,6 @@ class AuthProvider extends ChangeNotifier {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool get isAuthenticated => _isAuthenticated;
-
-  String? get errorMessage => _errorMessage;
-
-  bool get hasShownError => _hasShownError;
 
   bool get visibility => _visibility;
 
@@ -31,10 +26,6 @@ class AuthProvider extends ChangeNotifier {
   String get registrationNumber => _registrationNumber;
 
   GlobalKey<FormState> get formKey => _formKey;
-
-  void errorShown() {
-    _hasShownError = true;
-  }
 
   void _login() async {
     if (_registrationNumber.isEmpty || _password.isEmpty) {
@@ -47,13 +38,8 @@ class AuthProvider extends ChangeNotifier {
     final result = await authRepository.login(registrationNumber, password);
 
     result.fold(
-      (success) {
-        _isAuthenticated = true;
-      },
-      (failure) {
-        _hasShownError = false;
-        _errorMessage = failure;
-      },
+      (success) => _isAuthenticated = true,
+      (failure) => setError(failure),
     );
 
     _loading = false;

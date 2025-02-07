@@ -33,89 +33,10 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
     final provider = context.read<UserProvider>();
     if (provider.universityLogo == null || provider.userImage == null) return Placeholder();
 
-    final universityLogo = context.read<UserProvider>().universityLogo!;
-    final studentImage = context.read<UserProvider>().userImage!;
-    final student = Student(
-        birthDate: "2060-19-32", birthPlace: "setif", firstName: "Mouhamed", lastName: "Bourouba");
-
     return Scaffold(
-      backgroundColor: Colors.grey[200], // Light background
       appBar: AppBar(
         title: const Text('Student Profile'),
         centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // University Logo
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              decoration: BoxDecoration(
-                color: Colors.blue.shade700,
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
-                ),
-              ),
-              child: Column(
-                children: [
-                  CircleAvatar(
-                    child: Image.file(universityLogo),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    "University Name",
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            // Student Profile Card
-            Card(
-              margin: const EdgeInsets.symmetric(horizontal: 20),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              elevation: 5,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    // Student Photo
-                    CircleAvatar(
-                      radius: 50,
-                      child: Image.file(studentImage),
-                    ),
-                    const SizedBox(height: 10),
-
-                    // Student Name
-                    Text(
-                      '${student.firstName} ${student.lastName}',
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-
-                    const Divider(height: 30, thickness: 1),
-
-                    // Student Info List
-                    _buildInfoRow(Icons.cake, "Birth Date", student.birthDate),
-                    _buildInfoRow(Icons.location_on, "Birth Place", student.birthPlace),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
