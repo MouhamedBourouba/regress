@@ -55,7 +55,12 @@ class ProgressAPI {
     String studentUuid,
   ) =>
       _get(jwtToken, "bac/$studentUuid/individu").fold(
-        (res) => StudentDataEntity.fromJson(jsonDecode(res.body)).toSuccess(),
+        (res) {
+          // some times progres api returns array with one element RANDOMLY
+          dynamic studentDataDecoded = jsonDecode(res.body);
+          if (studentDataDecoded is List) studentDataDecoded = studentDataDecoded.first;
+          return StudentDataEntity.fromJson(studentDataDecoded).toSuccess();
+        },
         (error) => error.toFailure(),
       );
 
