@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
-import 'package:regress/domain/models/Student.dart';
+import 'package:regress/domain/models/student.dart';
 import 'package:regress/domain/repository/user_data_repository.dart';
 import 'package:regress/ui/providers/error_mixin.dart';
 import 'package:result_dart/result_dart.dart';

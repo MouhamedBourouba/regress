@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:regress/domain/models/Student.dart';
 import 'package:regress/ui/providers/user_provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -36,28 +35,6 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Student Profile'),
-        centerTitle: true,
-      ),
-    );
-  }
-
-  Widget _buildInfoRow(IconData icon, String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        children: [
-          Icon(icon, color: Colors.blue),
-          const SizedBox(width: 10),
-          Text(
-            label,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-          const Spacer(),
-          Text(
-            value,
-            style: const TextStyle(color: Colors.grey),
-          ),
-        ],
       ),
     );
   }

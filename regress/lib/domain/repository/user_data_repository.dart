@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:regress/domain/models/Student.dart';
+import 'package:regress/domain/models/student.dart';
 import 'package:result_dart/result_dart.dart';
 
 abstract class UserRepository {

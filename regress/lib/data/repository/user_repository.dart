@@ -5,7 +5,7 @@ import 'package:regress/data/constants.dart';
 import 'package:regress/data/models/student_data_entity.dart';
 import 'package:regress/data/models/student_ids_entity.dart';
 import 'package:regress/data/sources/progress_api.dart';
-import 'package:regress/domain/models/Student.dart';
+import 'package:regress/domain/models/student.dart';
 import 'package:regress/domain/repository/auth_repository.dart';
 import 'package:regress/domain/repository/user_data_repository.dart';
 import 'package:result_dart/result_dart.dart';
