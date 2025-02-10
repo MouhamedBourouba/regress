@@ -59,7 +59,18 @@ class ProgressAPI {
           // some times progres api returns array with one element RANDOMLY
           dynamic studentDataDecoded = jsonDecode(res.body);
           if (studentDataDecoded is List) studentDataDecoded = studentDataDecoded.first;
-          return StudentDataEntity.fromJson(studentDataDecoded).toSuccess();
+
+          // some times the progres api returns strings with appended spaces
+          final entity = StudentDataEntity.fromJson(studentDataDecoded);
+          entity.dateNaissance.trim();
+          entity.lieuNaissance.trim();
+          entity.nomArabe.trim();
+          entity.nomLatin.trim();
+          entity.prenomArabe.trim();
+          entity.prenomLatin.trim();
+          entity.lieuNaissanceArabe.trim();
+
+          return entity.toSuccess();
         },
         (error) => error.toFailure(),
       );

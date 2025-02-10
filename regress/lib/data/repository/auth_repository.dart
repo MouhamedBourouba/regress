@@ -25,9 +25,7 @@ class AuthRepositoryImpl implements AuthRepository {
     final res = _progressAPI.login(req);
 
     res.onSuccess(
-      (success) {
-        _sp.setString(Constants.STUDENT_IDS_KEY, success.toString());
-      },
+      (success) => _sp.setString(Constants.STUDENT_IDS_KEY, success.toString()),
     );
 
     return res;
@@ -40,7 +38,8 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   bool isAuthenticated() {
-    return _sp.containsKey(Constants.STUDENT_IDS_KEY);
+    _sp.containsKey(Constants.STUDENT_IDS_KEY);
+    return true;
   }
 
   @override

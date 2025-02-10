@@ -54,7 +54,6 @@ Map<String, dynamic> $StudentDataEntityToJson(StudentDataEntity entity) {
 extension StudentDataEntityExtension on StudentDataEntity {
   StudentDataEntity copyWith({
     int? id,
-    String? identifiant,
     String? dateNaissance,
     String? nomArabe,
     String? nomLatin,
@@ -62,9 +61,6 @@ extension StudentDataEntityExtension on StudentDataEntity {
     String? prenomLatin,
     String? lieuNaissance,
     String? lieuNaissanceArabe,
-    String? photo,
-    dynamic email,
-    String? idCarde,
   }) {
     return StudentDataEntity()
       ..id = id ?? this.id

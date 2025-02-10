@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:regress/ui/providers/user_provider.dart';
@@ -30,11 +28,83 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final provider = context.read<UserProvider>();
-    if (provider.universityLogo == null || provider.userImage == null) return Placeholder();
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Student Profile'),
+        leading: IconButton(onPressed: () {
+          
+        }, icon: Icon(Icons.arrow_back)),
+      ),
+      body: Selector<UserProvider, bool>(
+        builder: (context, loading, _) {
+          if (loading) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      height: 60,
+                      width: 60,
+                      child: ClipOval(
+                        child: provider.studentImage == null
+                            ? Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: AlignmentDirectional.topStart,
+                                    end: AlignmentDirectional.bottomEnd,
+                                    colors: [
+                                      Colors.blue.shade200,
+                                      Colors.blue,
+                                      Colors.blueAccent,
+                                    ],
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    provider.student!.firstName.substring(0, 1).toUpperCase() +
+                                        provider.student!.lastName.substring(0, 1).toUpperCase(),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineSmall
+                                        ?.copyWith(color: Colors.white),
+                                  ),
+                                ),
+                              )
+                            : Image.file(
+                                provider.studentImage!,
+                                fit: BoxFit.cover,
+                              ),
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    Column(
+                      children: [
+                        Text(
+                          provider.student!.firstName + provider.student!.lastName,
+                          style: Theme.of(context).textTheme.titleMedium,
+                          overflow: TextOverflow.fade,
+                        ),
+                        Text(
+                          "uni",
+                          style: Theme.of(context).textTheme.titleMedium,
+                          overflow: TextOverflow.fade,
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              )
+            ],
+          );
+        },
+        selector: (_, provider) => provider.loading,
       ),
     );
   }

@@ -19,7 +19,7 @@ final Color onSecondary = Colors.black;
 final Color error = Color(0xFFD32F2F);
 final Color onError = Colors.white;
 
-final Color surface = Colors.white;
+final Color surface = Colors.white12;
 final Color onSurface = Colors.black87;
 
 class RegessApp extends StatelessWidget {

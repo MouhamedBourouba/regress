@@ -11,22 +11,22 @@ class UserProvider extends ChangeNotifier with ErrorProviderMixin {
 
   UserProvider(this._userRepository);
 
-  bool _loading = false;
+  bool _loading = true;
   Student? _student;
-  File? _userImage;
+  File? _studentImage;
   File? _universityLogo;
 
   bool get loading => _loading;
 
-  File? get userImage => _userImage;
+  File? get studentImage => _studentImage;
 
   File? get universityLogo => _universityLogo;
 
   Student? get student => _student;
 
-  void loadData() async {
-    _loading = true;
-    notifyListeners();
+  Future<void> loadData() async {
+    // TODO: remove this delay
+    await Future.delayed(Duration(seconds: 3));
 
     final studentData = _userRepository.getStudentData();
     final userImage = _userRepository.getUserImage();
@@ -43,7 +43,7 @@ class UserProvider extends ChangeNotifier with ErrorProviderMixin {
 
     userImage.onSuccess(
       (success) {
-        _userImage = success;
+        _studentImage = success;
       },
     );
 
