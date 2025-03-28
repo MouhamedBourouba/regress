@@ -1,9 +1,8 @@
 import 'dart:convert';
 
 import 'package:regress/data/constants.dart';
-import 'package:regress/data/models/auth_request_entity.dart';
-import 'package:regress/data/models/student_ids_entity.dart';
 import 'package:regress/data/sources/progress_api.dart';
+import 'package:regress/domain/models/session_token.dart';
 import 'package:regress/domain/repository/auth_repository.dart';
 import 'package:result_dart/result_dart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,17 +14,13 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this._progressAPI, this._sp);
 
   @override
-  Future<ResultDart<void, String>> login(
+  Future<ResultDart<SessionToken, String>> login(
     String registrationNumber,
     String password,
   ) async {
-    AuthRequestEntity req = AuthRequestEntity();
-    req.username = registrationNumber;
-    req.password = password;
-    final res = _progressAPI.login(req);
-
+    final res = _progressAPI.login(registrationNumber, password);
     res.onSuccess(
-      (success) => _sp.setString(Constants.STUDENT_IDS_KEY, success.toString()),
+      (success) => _sp.setString(StorageKeys.sessionToken, success.toString()),
     );
 
     return res;
@@ -33,18 +28,17 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<void> logout() async {
-    await _sp.remove(Constants.STUDENT_IDS_KEY);
+    StorageKeys.keys.forEach(_sp.remove);
   }
 
   @override
   bool isAuthenticated() {
-    _sp.containsKey(Constants.STUDENT_IDS_KEY);
-    return true;
+    return _sp.containsKey(StorageKeys.sessionToken);
   }
 
   @override
-  StudentIdsEntity getUserIds() {
+  SessionToken getUserSession() {
     assert(isAuthenticated());
-    return StudentIdsEntity.fromJson(jsonDecode(_sp.getString(Constants.STUDENT_IDS_KEY)!));
+    return SessionToken.fromJson(jsonDecode(_sp.getString(StorageKeys.sessionToken)!));
   }
 }

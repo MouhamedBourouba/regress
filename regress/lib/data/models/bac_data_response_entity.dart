@@ -1,64 +1,83 @@
-import 'package:regress/generated/json/base/json_field.dart';
-import 'package:regress/generated/json/bac_data_response_entity.g.dart';
 import 'dart:convert';
+
+import 'package:regress/domain/models/major.dart';
+import 'package:regress/domain/models/student.dart';
+import 'package:regress/generated/json/bac_data_response_entity.g.dart';
+import 'package:regress/generated/json/base/json_field.dart';
+
 export 'package:regress/generated/json/bac_data_response_entity.g.dart';
 
 @JsonSerializable()
 class BacDataResponseEntity {
-	late double id;
-	late String numeroInscription;
-	late double anneeAcademiqueId;
-	late String anneeAcademiqueCode;
-	late double situationId;
-	late double dossierEtudiantId;
-	late String numeroMatricule;
-	late double ouvertureOffreFormationId;
-	late String refCodeCycle;
-	late String refLibelleCycle;
-	late String refLibelleCycleAr;
-	late double ofIdDomaine;
-	late String ofCodeDomaine;
-	late String ofLlDomaine;
-	late String ofLlDomaineArabe;
-	late double ofIdFiliere;
-	late String ofCodeFiliere;
-	late String ofLlFiliereArabe;
-	late String ofLlFiliere;
-	late double individuId;
-	late String nin;
-	late String individuNomArabe;
-	late String individuNomLatin;
-	late String individuPrenomArabe;
-	late String individuPrenomLatin;
-	late String individuDateNaissance;
-	late String individuLieuNaissance;
-	late String individuLieuNaissanceArabe;
-	late double refEtablissementId;
-	late String refCodeEtablissement;
-	late String llEtablissementArabe;
-	late String llEtablissementLatin;
-	late double moyenneBac;
-	late double lastMoyenne;
-	late String photo;
-	late double cycleId;
-	late String cycleCode;
-	late String cycleLibelleLongLt;
-	late double niveauId;
-	late String niveauCode;
-	late double niveauRang;
-	late String niveauLibelleLongLt;
-	late String niveauLibelleLongAr;
-	late bool transportPaye;
-	late bool fraisInscriptionPaye;
+  double? id;
+  String? numeroInscription;
+  double? anneeAcademiqueId;
+  String? anneeAcademiqueCode;
+  double? situationId;
+  double? dossierEtudiantId;
+  String? numeroMatricule;
+  double? ouvertureOffreFormationId;
+  String? refCodeCycle;
+  String? refLibelleCycle;
+  String? refLibelleCycleAr;
+  double? ofIdDomaine;
+  String? ofCodeDomaine;
+  String? ofLlDomaine;
+  String? ofLlDomaineArabe;
+  double? ofIdFiliere;
+  String? ofCodeFiliere;
+  String? ofLlFiliereArabe;
+  String? ofLlFiliere;
+  double? individuId;
+  String? nin;
+  String? individuNomArabe;
+  String? individuNomLatin;
+  String? individuPrenomArabe;
+  String? individuPrenomLatin;
+  String? individuDateNaissance;
+  String? individuLieuNaissance;
+  String? individuLieuNaissanceArabe;
+  double? refEtablissementId;
+  String? refCodeEtablissement;
+  String? llEtablissementArabe;
+  String? llEtablissementLatin;
+  double? moyenneBac;
+  double? lastMoyenne;
+  String? photo;
+  double? cycleId;
+  String? cycleCode;
+  String? cycleLibelleLongLt;
+  double? niveauId;
+  String? niveauCode;
+  double? niveauRang;
+  String? niveauLibelleLongLt;
+  String? niveauLibelleLongAr;
+  bool? transportPaye;
+  bool? fraisInscriptionPaye;
 
-	BacDataResponseEntity();
+  BacDataResponseEntity();
 
-	factory BacDataResponseEntity.fromJson(Map<String, dynamic> json) => $BacDataResponseEntityFromJson(json);
+  factory BacDataResponseEntity.fromJson(Map<String, dynamic> json) =>
+      $BacDataResponseEntityFromJson(json);
 
-	Map<String, dynamic> toJson() => $BacDataResponseEntityToJson(this);
+  Map<String, dynamic> toJson() => $BacDataResponseEntityToJson(this);
 
-	@override
-	String toString() {
-		return jsonEncode(this);
-	}
+  @override
+  String toString() => jsonEncode(this);
+
+  Student toStudent() => Student(
+        registrationNumber: numeroInscription ?? "N/A",
+        lastName: individuNomLatin ?? "N/A",
+        firstName: individuPrenomLatin ?? "N/A",
+        birthDate: individuDateNaissance ?? "N/A",
+        birthPlace: individuLieuNaissance ?? "N/A",
+        major: Major(
+          domain: ofLlDomaine ?? "N/A",
+          sector: ofLlFiliere ?? "N/A",
+          level: niveauCode ?? "N/A",
+        ),
+        universityName: llEtablissementLatin ?? "N/A",
+        paidTransport: transportPaye ?? true,
+        paidInscription: fraisInscriptionPaye ?? true,
+      );
 }

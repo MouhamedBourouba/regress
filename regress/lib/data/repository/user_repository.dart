@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:regress/data/constants.dart';
-import 'package:regress/data/models/student_data_entity.dart';
-import 'package:regress/data/models/student_ids_entity.dart';
+import 'package:regress/data/models/bac_data_response_entity.dart';
 import 'package:regress/data/sources/progress_api.dart';
+import 'package:regress/domain/models/session_token.dart';
 import 'package:regress/domain/models/student.dart';
 import 'package:regress/domain/repository/auth_repository.dart';
 import 'package:regress/domain/repository/user_data_repository.dart';
@@ -16,10 +16,10 @@ import '../sources/local_image_cache.dart';
 class UserRepositoryImpl implements UserRepository {
   final ProgressAPI _progressAPI;
   final AuthRepository _authRepository;
-  final SharedPreferences _sp;
   final Base64LocalImageCache _imageCache;
+  final SharedPreferences _preferences;
 
-  UserRepositoryImpl(this._progressAPI, this._sp, this._authRepository, this._imageCache);
+  UserRepositoryImpl(this._progressAPI, this._imageCache, this._authRepository, this._preferences);
 
   Future<ResultDart<File, Unit>> _fetchAndCacheImage(
     String imageKey,
@@ -42,42 +42,40 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<ResultDart<File, Unit>> getUserUniLogo() async => _fetchAndCacheImage(
-        Constants.UNI_LOGO_KEY,
+        StorageKeys.uniLogo,
         () {
-          StudentIdsEntity userIds = _authRepository.getUserIds();
+          SessionToken sessionToken = _authRepository.getUserSession();
           return _progressAPI.fetchUniversityLogo(
-            userIds.token,
-            userIds.etablissementId.toString(),
+            sessionToken.token,
+            sessionToken.etablissementId.toString(),
           );
         },
       );
 
   @override
   Future<ResultDart<File, Unit>> getUserImage() => _fetchAndCacheImage(
-        Constants.STUDENT_IMAGE_KEY,
+        StorageKeys.studentImage,
         () {
-          StudentIdsEntity userIds = _authRepository.getUserIds();
-          return _progressAPI.fetchUserImage(userIds.uuid, userIds.token);
+          SessionToken sessionToken = _authRepository.getUserSession();
+          return _progressAPI.fetchUserImage(sessionToken.uuid, sessionToken.token);
         },
       );
 
   @override
   Future<ResultDart<Student, String>> getStudentData() async {
-    if (_sp.containsKey(Constants.STUDENT_DATA_KEY)) {
-      return Student.fromEntity(
-        StudentDataEntity.fromJson(
-          jsonDecode(_sp.getString(Constants.STUDENT_DATA_KEY)!),
-        ),
-      ).toSuccess();
+    if (_preferences.containsKey(StorageKeys.studentData)) {
+      return BacDataResponseEntity.fromJson(
+        jsonDecode(_preferences.getString(StorageKeys.studentData)!),
+      ).toStudent().toSuccess();
     }
 
-    final studentIds = _authRepository.getUserIds();
-    final result = _progressAPI.getStudentData(studentIds.token, studentIds.uuid);
+    final sessionToken = _authRepository.getUserSession();
+    final result = _progressAPI.fetchStudentData(sessionToken.token, sessionToken.uuid);
 
     return result.fold(
-      (success) {
-        _sp.setString(Constants.STUDENT_DATA_KEY, success.toString());
-        return Student.fromEntity(success).toSuccess();
+      (studentDataResponse) {
+        _preferences.setString(StorageKeys.studentData, studentDataResponse.toString());
+        return studentDataResponse.last.toStudent().toSuccess();
       },
       (error) => error.toFailure(),
     );

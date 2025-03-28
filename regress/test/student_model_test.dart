@@ -10,7 +10,6 @@ void main() {
         domain: "Science",
         sector: "Computer Science",
         level: "Bachelor",
-        levelId: "CS101",
       );
 
       final json = major.toJson();
@@ -19,7 +18,6 @@ void main() {
       expect(newMajor.domain, major.domain);
       expect(newMajor.sector, major.sector);
       expect(newMajor.level, major.level);
-      expect(newMajor.levelId, major.levelId);
     });
   });
 
@@ -49,13 +47,8 @@ void main() {
           domain: "Science",
           sector: "Computer Science",
           level: "Bachelor",
-          levelId: "CS101",
         ),
         universityName: "Tech University",
-        groups: [
-          Group(number: "1", section: "A"),
-          Group(number: "2", section: "B"),
-        ],
       );
 
       final json = student.toJson();
@@ -73,13 +66,6 @@ void main() {
       expect(newStudent.major.domain, student.major.domain);
       expect(newStudent.major.sector, student.major.sector);
       expect(newStudent.major.level, student.major.level);
-      expect(newStudent.major.levelId, student.major.levelId);
-
-      expect(newStudent.groups.length, student.groups.length);
-      for (int i = 0; i < student.groups.length; i++) {
-        expect(newStudent.groups[i].number, student.groups[i].number);
-        expect(newStudent.groups[i].section, student.groups[i].section);
-      }
     });
   });
 }

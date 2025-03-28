@@ -29,11 +29,11 @@ class UserProvider extends ChangeNotifier with ErrorProviderMixin {
     await Future.delayed(Duration(seconds: 3));
 
     final studentData = _userRepository.getStudentData();
-    final userImage = _userRepository.getUserImage();
-    final uniLogo = _userRepository.getUserUniLogo();
+    // final userImage = _userRepository.getUserImage();
+    // final uniLogo = _userRepository.getUserUniLogo();
 
-    await userImage;
-    await uniLogo;
+    //await userImage;
+    // await uniLogo;
     await studentData;
 
     studentData.fold(
@@ -41,17 +41,17 @@ class UserProvider extends ChangeNotifier with ErrorProviderMixin {
       (failure) => setError(failure),
     );
 
-    userImage.onSuccess(
-      (success) {
-        _studentImage = success;
-      },
-    );
+   // userImage.onSuccess(
+   //   (success) {
+   //     _studentImage = success;
+   //   },
+   // );
 
-    uniLogo.onSuccess(
-      (success) {
-        _universityLogo = success;
-      },
-    );
+   // uniLogo.onSuccess(
+   //   (success) {
+   //     _universityLogo = success;
+   //   },
+   // );
 
     _loading = false;
     notifyListeners();

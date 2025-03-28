@@ -18,7 +18,8 @@ class LoginScreen extends StatelessWidget {
     if (authProvider.errorMessage != null && !authProvider.hasShownError) {
       SchedulerBinding.instance.addPostFrameCallback(
         (_) {
-          ScaffoldMessenger.of(context).hideCurrentSnackBar(reason: SnackBarClosedReason.hide);
+          ScaffoldMessenger.of(context)
+              .hideCurrentSnackBar(reason: SnackBarClosedReason.hide);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(authProvider.errorMessage!),
@@ -135,8 +136,9 @@ class _LoginForm extends StatelessWidget {
                 prefixIcon: Icon(Icons.lock),
                 suffixIcon: IconButton(
                   onPressed: authProvider.onVisibilityClicked,
-                  icon:
-                      authProvider.visibility ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
+                  icon: authProvider.visibility
+                      ? Icon(Icons.visibility)
+                      : Icon(Icons.visibility_off),
                 ),
               ),
               obscureText: !authProvider.visibility,

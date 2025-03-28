@@ -5,7 +5,6 @@ export 'package:regress/generated/json/student_data_entity.g.dart';
 
 @JsonSerializable()
 class StudentDataEntity {
-
 	late int id;
 	late String dateNaissance;
 	late String nomArabe;

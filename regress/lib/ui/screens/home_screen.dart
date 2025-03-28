@@ -113,7 +113,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
-    context.read<UserProvider>().loadData();
+    // context.read<UserProvider>().loadData();
     super.initState();
   }
 

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:regress/app/di.dart';
 import 'package:regress/app/providers.dart';
-import 'package:regress/domain/repository/user_data_repository.dart';
 import 'package:regress/ui/providers/auth_provider.dart';
-import 'package:regress/ui/providers/user_provider.dart';
 import 'package:regress/ui/screens/home_screen.dart';
 import 'package:regress/ui/screens/login_screen.dart';
 
@@ -95,7 +92,6 @@ class RegessApp extends StatelessWidget {
       themeMode: ThemeMode.light,
       home: AppProviders(
         child: Builder(builder: (context)  {
-          final up = gt.get<UserRepository>();
           return context.read<AuthProvider>().checkAuthentication() ? StudentProfileScreen() : LoginScreen();
         }),
       ),

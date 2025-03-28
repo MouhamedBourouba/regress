@@ -1,40 +1,40 @@
 import 'package:regress/generated/json/base/json_convert_content.dart';
-import 'package:regress/data/models/student_ids_entity.dart';
+import 'package:regress/domain/models/session_token.dart';
 
-StudentIdsEntity $StudentIdsEntityFromJson(Map<String, dynamic> json) {
-  final StudentIdsEntity studentIdsEntity = StudentIdsEntity();
+SessionToken $AuthResponseEntityFromJson(Map<String, dynamic> json) {
+  final SessionToken authResponseEntity = SessionToken();
   final String? expirationDate = jsonConvert.convert<String>(json['expirationDate']);
   if (expirationDate != null) {
-    studentIdsEntity.expirationDate = expirationDate;
+    authResponseEntity.expirationDate = expirationDate;
   }
   final String? token = jsonConvert.convert<String>(json['token']);
   if (token != null) {
-    studentIdsEntity.token = token;
+    authResponseEntity.token = token;
   }
   final int? userId = jsonConvert.convert<int>(json['userId']);
   if (userId != null) {
-    studentIdsEntity.userId = userId;
+    authResponseEntity.userId = userId;
   }
   final String? uuid = jsonConvert.convert<String>(json['uuid']);
   if (uuid != null) {
-    studentIdsEntity.uuid = uuid;
+    authResponseEntity.uuid = uuid;
   }
   final int? idIndividu = jsonConvert.convert<int>(json['idIndividu']);
   if (idIndividu != null) {
-    studentIdsEntity.idIndividu = idIndividu;
+    authResponseEntity.idIndividu = idIndividu;
   }
   final int? etablissementId = jsonConvert.convert<int>(json['etablissementId']);
   if (etablissementId != null) {
-    studentIdsEntity.etablissementId = etablissementId;
+    authResponseEntity.etablissementId = etablissementId;
   }
   final String? userName = jsonConvert.convert<String>(json['userName']);
   if (userName != null) {
-    studentIdsEntity.userName = userName;
+    authResponseEntity.userName = userName;
   }
-  return studentIdsEntity;
+  return authResponseEntity;
 }
 
-Map<String, dynamic> $StudentIdsEntityToJson(StudentIdsEntity entity) {
+Map<String, dynamic> $AuthResponseEntityToJson(SessionToken entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['expirationDate'] = entity.expirationDate;
   data['token'] = entity.token;
@@ -46,8 +46,8 @@ Map<String, dynamic> $StudentIdsEntityToJson(StudentIdsEntity entity) {
   return data;
 }
 
-extension StudentIdsEntityExtension on StudentIdsEntity {
-  StudentIdsEntity copyWith({
+extension AuthResponseEntityExtension on SessionToken {
+  SessionToken copyWith({
     String? expirationDate,
     String? token,
     int? userId,
@@ -56,7 +56,7 @@ extension StudentIdsEntityExtension on StudentIdsEntity {
     int? etablissementId,
     String? userName,
   }) {
-    return StudentIdsEntity()
+    return SessionToken()
       ..expirationDate = expirationDate ?? this.expirationDate
       ..token = token ?? this.token
       ..userId = userId ?? this.userId

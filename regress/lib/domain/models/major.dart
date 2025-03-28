@@ -4,13 +4,11 @@ class Major {
   final String domain;
   final String sector;
   final String level;
-  final String levelId;
 
   Major({
     required this.domain,
     required this.sector,
     required this.level,
-    required this.levelId,
   });
 
   // Convert Major object to Map
@@ -19,7 +17,6 @@ class Major {
       'domain': domain,
       'sector': sector,
       'level': level,
-      'levelId': levelId,
     };
   }
 
@@ -29,7 +26,6 @@ class Major {
       domain: map['domain'],
       sector: map['sector'],
       level: map['level'],
-      levelId: map['levelId'],
     );
   }
 

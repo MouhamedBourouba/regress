@@ -19,6 +19,7 @@ dependencies:
   path_provider:
   flutter_bloc: ^9.0.0
   crypto: ^3.0.6
+  hive_flutter: ^1.1.0
 
 dev_dependencies:
   flutter_test:

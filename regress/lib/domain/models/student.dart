@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:regress/domain/models/group.dart';
 import 'package:regress/domain/models/major.dart';
 
 class Student {
@@ -13,7 +12,6 @@ class Student {
   final bool paidInscription;
   final Major major;
   final String universityName;
-  final List<Group> groups;
 
   Student({
     required this.registrationNumber,
@@ -25,7 +23,6 @@ class Student {
     required this.universityName,
     required this.paidTransport,
     required this.paidInscription,
-    required this.groups,
   });
 
   Map<String, dynamic> toJson() {
@@ -39,7 +36,6 @@ class Student {
       'paidInscription': paidInscription,
       'major': major.toString(),
       'universityName': universityName,
-      'groups': groups.map((e) => e.toJson()).toList(),
     };
   }
 
@@ -54,7 +50,6 @@ class Student {
       paidInscription: map['paidInscription'],
       major: Major.fromJson(jsonDecode(map["major"])),
       universityName: map['universityName'],
-      groups: List<Group>.from(map['groups'].map((g) => Group.fromJson(g))),
     );
   }
 
