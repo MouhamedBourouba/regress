@@ -12,16 +12,16 @@ class Base64LocalImageCache {
 
   Base64LocalImageCache(this._sp);
 
-  String _generateFileName(String key, {String ext = ".jpg"}) {
+  Future<String> _generateFilePath(String key, {String ext = ".jpg"}) async {
     final bytes = utf8.encode(key);
     final digest = md5.convert(bytes);
-    return "${digest.toString()}$ext";
+    final fileName = "${digest.toString()}$ext";
+    final directory = await getApplicationDocumentsDirectory();
+    return "${directory.path}/$fileName";
   }
 
-  Future<File> _saveImageLocally(Uint8List imageData, String fileName) async {
-    final directory = await getApplicationDocumentsDirectory();
-    final localFilePath = "${directory.path}/$fileName";
-    final file = File(localFilePath);
+  Future<File> _saveImageLocally(Uint8List imageData, String filePath) async {
+    final file = File(filePath);
     await file.writeAsBytes(imageData);
     return file;
   }
@@ -41,8 +41,13 @@ class Base64LocalImageCache {
     String cacheKey,
   ) async {
     final imageData = base64Decode(imageBase64);
-    final file = await _saveImageLocally(imageData, _generateFileName(cacheKey));
+    final file = await _saveImageLocally(imageData, await _generateFilePath(cacheKey));
     _sp.setString(cacheKey, file.path);
     return file;
+  }
+
+  Future<void> removeImage(String imageKey) async {
+    final file = File(await _generateFilePath(_sp.getString(imageKey)!));
+    if (await file.exists()) await file.delete();
   }
 }

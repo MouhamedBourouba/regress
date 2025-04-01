@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:regress/data/constants.dart';
-import 'package:regress/data/models/bac_data_response_entity.dart';
 import 'package:regress/data/models/session_token.dart';
 import 'package:regress/data/models/student_bac_info_response_v2_entity.dart';
 import 'package:regress/data/sources/progress_api.dart';
@@ -34,6 +33,8 @@ class UserRepositoryImpl implements StudentRepository {
 
   @override
   Future<void> logout() async {
+    _imageCache.removeImage(StorageKeys.studentImage);
+    _imageCache.removeImage(StorageKeys.uniLogo);
     StorageKeys.keys.forEach(_preferences.remove);
   }
 
