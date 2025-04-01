@@ -287,6 +287,7 @@ extension BacDataResponseEntityExtension on BacDataResponseEntity {
     bool? fraisInscriptionPaye,
   }) {
     return BacDataResponseEntity()
+
       ..id = id ?? this.id
       ..numeroInscription = numeroInscription ?? this.numeroInscription
       ..anneeAcademiqueId = anneeAcademiqueId ?? this.anneeAcademiqueId

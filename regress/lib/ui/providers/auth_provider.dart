@@ -1,12 +1,12 @@
 import 'package:flutter/widgets.dart';
-import 'package:regress/domain/repository/auth_repository.dart';
+import 'package:regress/domain/repository/user_data_repository.dart';
 import 'package:regress/ui/providers/error_mixin.dart';
 import 'package:regress/utils/utils.dart';
 
 class AuthProvider extends ChangeNotifier with ErrorProviderMixin {
-  AuthRepository authRepository;
+  StudentRepository userRepository;
 
-  AuthProvider(this.authRepository);
+  AuthProvider(this.userRepository);
 
   bool _isAuthenticated = false;
   bool _loading = false;
@@ -35,7 +35,7 @@ class AuthProvider extends ChangeNotifier with ErrorProviderMixin {
     _loading = true;
     notifyListeners();
 
-    final result = await authRepository.login(registrationNumber, password);
+    final result = await userRepository.login(registrationNumber, password);
 
     result.fold(
       (success) => _isAuthenticated = true,
@@ -91,12 +91,12 @@ class AuthProvider extends ChangeNotifier with ErrorProviderMixin {
   }
 
   void logout() async {
-    await authRepository.logout();
+    await userRepository.logout();
     _isAuthenticated = false;
     notifyListeners();
   }
 
   bool checkAuthentication() {
-    return authRepository.isAuthenticated();
+    return userRepository.isAuthenticated();
   }
 }

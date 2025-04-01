@@ -2,7 +2,8 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:regress/data/models/bac_data_response_entity.dart';
-import 'package:regress/domain/models/session_token.dart';
+import 'package:regress/data/models/session_token.dart';
+import 'package:regress/data/models/student_bac_info_response_v2_entity.dart';
 import 'package:result_dart/result_dart.dart';
 
 class ProgressAPI {
@@ -43,6 +44,7 @@ class ProgressAPI {
       );
 
   // Base64 encoded
+  // https://progres.mesrs.dz/api/logoEtablissement/{establishmentId}
   Future<ResultDart<String, Unit>> fetchUniversityLogo(String jwtToken, String establishmentId) =>
       _get(jwtToken, "logoEtablissement/$establishmentId").fold(
         (res) => res.body.toSuccess(),
@@ -50,24 +52,24 @@ class ProgressAPI {
       );
 
   // https://progres.mesrs.dz/api/infos/bac/{uuid}/dias
-  Future<ResultDart<List<BacDataResponseEntity>, String>> fetchStudentData(
+  Future<ResultDart<List<StudentBacInfoResponseV2Entity>, String>> fetchStudentData(
     String jwtToken,
     String studentUuid,
   ) =>
       _get(jwtToken, "bac/$studentUuid/dias").fold(
         (res) {
           // some times progres api returns array with one element RANDOMLY
-          var result = <BacDataResponseEntity>[];
-          dynamic studentDataDecoded = jsonDecode(res.body);
+          var result = <StudentBacInfoResponseV2Entity>[];
+          dynamic studentDataDecoded = jsonDecode(utf8.decode(res.bodyBytes));
+
           if (studentDataDecoded is List) {
-            for (var element in studentDataDecoded) {
-              result.add(BacDataResponseEntity.fromJson(element));
-            }
+            result = studentDataDecoded
+                .map((e) => StudentBacInfoResponseV2Entity.fromJson(e))
+                .toList(growable: false);
           } else {
-            result.add(BacDataResponseEntity.fromJson(studentDataDecoded));
+            result.add(StudentBacInfoResponseV2Entity.fromJson(studentDataDecoded));
           }
-          // some times the progres api returns strings with appended spaces
-          // final entity = BacDataResponseEntity.fromJson();
+
           return result.toSuccess();
         },
         (error) => error.toFailure(),

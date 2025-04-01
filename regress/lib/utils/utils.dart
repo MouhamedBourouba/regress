@@ -4,3 +4,10 @@ bool isNumeric(String value) {
 
   return !value.runes.any((char) => char < start || char > end);
 }
+
+extension GlobalExtentions on Object? {
+  String toStringOr([String defaultValue = ""]) {
+    if(this == null) return defaultValue;
+    return toString();
+  }
+}

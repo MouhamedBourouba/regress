@@ -41,8 +41,6 @@ void main() {
         firstName: "John",
         birthDate: "2000-01-01",
         birthPlace: "New York",
-        paidTransport: true,
-        paidInscription: false,
         major: Major(
           domain: "Science",
           sector: "Computer Science",
@@ -59,8 +57,6 @@ void main() {
       expect(newStudent.firstName, student.firstName);
       expect(newStudent.birthDate, student.birthDate);
       expect(newStudent.birthPlace, student.birthPlace);
-      expect(newStudent.paidTransport, student.paidTransport);
-      expect(newStudent.paidInscription, student.paidInscription);
       expect(newStudent.universityName, student.universityName);
 
       expect(newStudent.major.domain, student.major.domain);

@@ -8,8 +8,6 @@ class Student {
   final String firstName;
   final String birthDate;
   final String birthPlace;
-  final bool paidTransport;
-  final bool paidInscription;
   final Major major;
   final String universityName;
 
@@ -21,8 +19,6 @@ class Student {
     required this.birthPlace,
     required this.major,
     required this.universityName,
-    required this.paidTransport,
-    required this.paidInscription,
   });
 
   Map<String, dynamic> toJson() {
@@ -32,8 +28,6 @@ class Student {
       'firstName': firstName,
       'birthDate': birthDate,
       'birthPlace': birthPlace,
-      'paidTransport': paidTransport,
-      'paidInscription': paidInscription,
       'major': major.toString(),
       'universityName': universityName,
     };
@@ -46,8 +40,6 @@ class Student {
       firstName: map['firstName'],
       birthDate: map['birthDate'],
       birthPlace: map['birthPlace'],
-      paidTransport: map['paidTransport'],
-      paidInscription: map['paidInscription'],
       major: Major.fromJson(jsonDecode(map["major"])),
       universityName: map['universityName'],
     );

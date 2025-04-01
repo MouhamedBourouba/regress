@@ -77,7 +77,5 @@ class BacDataResponseEntity {
           level: niveauCode ?? "N/A",
         ),
         universityName: llEtablissementLatin ?? "N/A",
-        paidTransport: transportPaye ?? true,
-        paidInscription: fraisInscriptionPaye ?? true,
       );
 }

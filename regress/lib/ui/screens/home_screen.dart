@@ -2,13 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:regress/ui/providers/user_provider.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
 class StudentProfileScreen extends StatefulWidget {
   const StudentProfileScreen({
     super.key,
@@ -31,9 +24,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(onPressed: () {
-          
-        }, icon: Icon(Icons.arrow_back)),
+        leading: IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back)),
       ),
       body: Selector<UserProvider, bool>(
         builder: (context, loading, _) {
@@ -55,32 +46,33 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
                       child: ClipOval(
                         child: provider.studentImage == null
                             ? Container(
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: AlignmentDirectional.topStart,
-                                    end: AlignmentDirectional.bottomEnd,
-                                    colors: [
-                                      Colors.blue.shade200,
-                                      Colors.blue,
-                                      Colors.blueAccent,
-                                    ],
-                                  ),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    provider.student!.firstName.substring(0, 1).toUpperCase() +
-                                        provider.student!.lastName.substring(0, 1).toUpperCase(),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineSmall
-                                        ?.copyWith(color: Colors.white),
-                                  ),
-                                ),
-                              )
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: AlignmentDirectional.topStart,
+                              end: AlignmentDirectional.bottomEnd,
+                              colors: [
+                                Colors.blue.shade200,
+                                Colors.blue,
+                                Colors.blueAccent,
+                              ],
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              provider.student!.firstName.substring(0, 1).toUpperCase() +
+                                  provider.student!.lastName.substring(0, 1).toUpperCase(),
+                              style: Theme
+                                  .of(context)
+                                  .textTheme
+                                  .headlineSmall
+                                  ?.copyWith(color: Colors.white),
+                            ),
+                          ),
+                        )
                             : Image.file(
-                                provider.studentImage!,
-                                fit: BoxFit.cover,
-                              ),
+                          provider.studentImage!,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                     SizedBox(width: 8),
@@ -88,12 +80,18 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
                       children: [
                         Text(
                           provider.student!.firstName + provider.student!.lastName,
-                          style: Theme.of(context).textTheme.titleMedium,
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .titleMedium,
                           overflow: TextOverflow.fade,
                         ),
                         Text(
-                          "uni",
-                          style: Theme.of(context).textTheme.titleMedium,
+                          provider.student!.universityName,
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .titleMedium,
                           overflow: TextOverflow.fade,
                         ),
                       ],
@@ -105,9 +103,17 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
           );
         },
         selector: (_, provider) => provider.loading,
+        shouldRebuild: (previous, next) => previous != next,
       ),
     );
   }
+}
+
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
