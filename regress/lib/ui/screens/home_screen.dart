@@ -42,21 +42,23 @@ class StudentWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Student Information',
+                'Student data',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              const SizedBox(height: 8),
+              const Divider(),
               buildInfoRow('Registration Number', student.registrationNumber),
               buildInfoRow('Last Name', student.lastName),
               buildInfoRow('First Name', student.firstName),
               buildInfoRow('Birth Date', student.birthDate),
               buildInfoRow('Birth Place', student.birthPlace),
               buildInfoRow('University Name', student.universityName),
-              const Divider(),
+
+              const SizedBox(height: 8),
               Text(
-                'Major Information',
-                style: Theme.of(context).textTheme.titleMedium,
+                'Major',
+                style: Theme.of(context).textTheme.titleLarge,
               ),
+              const Divider(),
               buildInfoRow('Domain', student.major.domain),
               buildInfoRow('Sector', student.major.sector),
               buildInfoRow('Level', student.major.level),
@@ -112,7 +114,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back)),
+        title: Text("Profile"),
       ),
       body: Selector<UserProvider, bool>(
         builder: (context, loading, _) {
@@ -144,12 +146,12 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
                 ElevatedButton(
                   onPressed: () async {
                     final result = await _showLogoutConfirmationDialog(context);
-                    if(result) {
-                     authProvider.logout();
+                    if (result) {
+                      authProvider.logout();
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red.shade700,
+                    backgroundColor: Theme.of(context).colorScheme.error,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(7),
                     ),

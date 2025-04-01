@@ -25,9 +25,6 @@ class UserProvider extends ChangeNotifier with ErrorProviderMixin {
   Student? get student => _student;
 
   Future<void> loadData() async {
-    // TODO: remove this delay
-    await Future.delayed(Duration(seconds: 3));
-
     final studentData = _userRepository.getStudentData();
     final userImage = _userRepository.getUserImage();
     final uniLogo = _userRepository.getUserUniLogo();
