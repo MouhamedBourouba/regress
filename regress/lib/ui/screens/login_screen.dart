@@ -34,7 +34,7 @@ class LoginScreen extends StatelessWidget {
     if (authProvider.isAuthenticated) {
       SchedulerBinding.instance.addPostFrameCallback(
         (timeStamp) {
-          Navigator.of(context).push(MaterialPageRoute(
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) => HomeScreen(),
           ));
         },
@@ -145,16 +145,18 @@ class _LoginForm extends StatelessWidget {
               onChanged: authProvider.onPasswordChanged,
               validator: authProvider.validatePassword,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 16),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: 12),
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                backgroundColor: Colors.blue.shade600,
+                foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
               onPressed: authProvider.onButtonClick(),
-              child: const Text("LOGIN"),
+              child: const Text("Login"),
             )
           ],
         ),

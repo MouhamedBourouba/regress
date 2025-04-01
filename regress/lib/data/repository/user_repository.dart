@@ -28,7 +28,10 @@ class UserRepositoryImpl implements StudentRepository {
     await res.onSuccess(
       (success) async => await _preferences.setString(StorageKeys.sessionToken, success.toString()),
     );
-    return unit.toSuccess();
+    return res.fold(
+      (success) => unit.toSuccess(),
+      (error) => error.toFailure(),
+    );
   }
 
   @override
