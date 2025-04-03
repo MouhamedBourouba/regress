@@ -43,10 +43,10 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
       return Center(
         child: CircularProgressIndicator(),
       );
-    } else if (provider.isError) {
+    } else if (!provider.loading && provider.student == null) {
       return Center(
         child: Text(
-          provider.errorMessage!,
+          provider.errorMessage ?? "Unknown error please try again later",
           style: TextStyle(color: Theme.of(context).colorScheme.error),
         ),
       );
@@ -155,7 +155,7 @@ class _StudentWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Student data',
+                "General information",
                 style: Theme.of(context)
                     .textTheme
                     .titleLarge

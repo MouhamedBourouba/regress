@@ -26,5 +26,9 @@ class StudentGroupEntity {
     return jsonEncode(this);
   }
 
-  Group toGroup() => Group(number: nomGroupePedagogique, section: nomSection);
+  Group toGroup() => Group(
+        number: nomGroupePedagogique,
+        section: nomSection,
+        period: periodeLibelleLongLt,
+      );
 }

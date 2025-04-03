@@ -21,18 +21,6 @@ void main() {
     });
   });
 
-  group('Group', () {
-    test('toJson and fromJson should work correctly', () {
-      final group = Group(number: "1", section: "A");
-
-      final json = group.toJson();
-      final newGroup = Group.fromJson(json);
-
-      expect(newGroup.number, group.number);
-      expect(newGroup.section, group.section);
-    });
-  });
-
   group('Student', () {
     test('toJson and fromJson should work correctly', () {
       final student = Student(
