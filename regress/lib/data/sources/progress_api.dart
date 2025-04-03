@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:regress/data/models/bac_data_response_entity.dart';
 import 'package:regress/data/models/session_token.dart';
 import 'package:regress/data/models/student_bac_info_response_v2_entity.dart';
+import 'package:regress/data/models/student_group_entity.dart';
 import 'package:result_dart/result_dart.dart';
 
 class ProgressAPI {
@@ -75,22 +75,31 @@ class ProgressAPI {
         (error) => error.toFailure(),
       );
 
+  //https://progres.mesrs.dz/api/infos/dia/{student id}/groups
+  Future<ResultDart<List<StudentGroupEntity>, String>> fetchStudentGroups(
+    String jwt,
+    String studentId,
+  ) =>
+      _get(jwt, "dia/$studentId/groups").fold(
+        (response) => (jsonDecode(response.body) as List)
+            .map(
+              (e) => StudentGroupEntity.fromJson(e),
+            )
+            .toList(growable: false)
+            .toSuccess(),
+        (error) => error.toFailure(),
+      );
+
   Future<ResultDart<SessionToken, String>> login(
     String registrationNumber,
     String password,
   ) async {
     Uri uri = Uri.parse("$_baseUrl/authentication/v1/");
 
-    final headers = {
-      'Accept': 'application/json, text/plain, */*',
-      'Content-Type': 'application/json',
-    };
-
     try {
       final body = """{"username": "$registrationNumber","password": "$password"}""";
       final response = await http.post(
         uri,
-        headers: headers,
         body: body,
       );
       if (response.statusCode == 200) {

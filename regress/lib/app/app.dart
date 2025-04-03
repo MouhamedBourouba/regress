@@ -24,25 +24,25 @@ class RegressApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Regress',
-      theme: ThemeData(
-        colorScheme: ColorScheme(
-          brightness: brightness,
-          primary: primary,
-          onPrimary: onPrimary,
-          secondary: secondary,
-          onSecondary: onSecondary,
-          error: error,
-          onError: onError,
-          surface: surface,
-          onSurface: onSurface,
+    return AppProviders(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Regress',
+        theme: ThemeData(
+          colorScheme: ColorScheme(
+            brightness: brightness,
+            primary: primary,
+            onPrimary: onPrimary,
+            secondary: secondary,
+            onSecondary: onSecondary,
+            error: error,
+            onError: onError,
+            surface: surface,
+            onSurface: onSurface,
+          ),
         ),
-      ),
-      themeMode: ThemeMode.light,
-      home: AppProviders(
-        child: Builder(builder: (context) {
+        themeMode: ThemeMode.light,
+        home: Builder(builder: (context) {
           return context.read<AuthProvider>().checkAuthentication()
               ? HomeScreen()
               : LoginScreen();

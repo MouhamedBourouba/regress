@@ -4,7 +4,9 @@ import 'dart:io';
 import 'package:regress/data/constants.dart';
 import 'package:regress/data/models/session_token.dart';
 import 'package:regress/data/models/student_bac_info_response_v2_entity.dart';
+import 'package:regress/data/models/student_group_entity.dart';
 import 'package:regress/data/sources/progress_api.dart';
+import 'package:regress/domain/models/group.dart';
 import 'package:regress/domain/models/student.dart';
 import 'package:regress/domain/repository/user_data_repository.dart';
 import 'package:result_dart/result_dart.dart';
@@ -104,6 +106,44 @@ class UserRepositoryImpl implements StudentRepository {
       },
       (error) => error.toFailure(),
     );
+  }
+
+  @override
+  Future<ResultDart<List<Group>, String>> getStudentGroups() async {
+    if (_preferences.containsKey(StorageKeys.studentGroups)) {
+      var thejasn = jsonDecode(_preferences.getString(StorageKeys.studentGroups)!);
+      return (thejasn as List)
+          .map(
+            (e) => StudentGroupEntity.fromJson(e).toGroup(),
+          )
+          .toList()
+          .toSuccess();
+    }
+    final theid = await _getStudentId();
+    if (theid.isError()) return theid.exceptionOrNull()!.toFailure();
+
+    final data = _progressAPI.fetchStudentGroups(_getUserSession().token, theid.getOrThrow());
+
+    return data.fold(
+      (success) {
+        _preferences.setString(StorageKeys.studentGroups, success.toString());
+        return success.map((e) => e.toGroup()).toList(growable: false).toSuccess();
+      },
+      (error) => error.toFailure(),
+    );
+  }
+
+  Future<ResultDart<String, String>> _getStudentId() async {
+    if (!_preferences.containsKey(StorageKeys.studentData)) {
+      final result = await getStudentData();
+      if (result.isError()) {
+        return result.exceptionOrNull()!.toFailure();
+      }
+    }
+    var jason = jsonDecode(_preferences.getString(StorageKeys.studentData)!);
+    if (jason is List) jason = jason.last;
+    final theIDD = jason["id"].toString();
+    return theIDD.toSuccess();
   }
 
   SessionToken _getUserSession() {

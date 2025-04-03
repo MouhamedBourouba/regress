@@ -33,9 +33,12 @@ class LoginScreen extends StatelessWidget {
     if (authProvider.isAuthenticated) {
       SchedulerBinding.instance.addPostFrameCallback(
         (timeStamp) {
-          Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (context) => HomeScreen(),
-          ));
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => HomeScreen(),
+            ),
+            (route) => false,
+          );
         },
       );
     }
@@ -108,7 +111,7 @@ class _LoginForm extends StatelessWidget {
               "assets/images/uni_logo.png",
               height: 100,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 6),
             Text(
               "Student Portal",
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -118,7 +121,7 @@ class _LoginForm extends StatelessWidget {
                   ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
             TextFormField(
               decoration: InputDecoration(
                 hintText: "Registration number",
@@ -143,11 +146,11 @@ class _LoginForm extends StatelessWidget {
               onChanged: authProvider.onPasswordChanged,
               validator: authProvider.validatePassword,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 10),
-                backgroundColor: Colors.blue.shade600,
+                backgroundColor: Theme.of(context).colorScheme.primary,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),

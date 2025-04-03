@@ -14,12 +14,6 @@ class StudentProfileScreen extends StatefulWidget {
 }
 
 class _StudentProfileScreenState extends State<StudentProfileScreen> {
-  @override
-  void initState() {
-    context.read<UserProvider>().loadData();
-    super.initState();
-  }
-
   Future<bool> _showLogoutConfirmationDialog(BuildContext context) async {
     final bool? result = await showDialog<bool>(
       context: context,
@@ -29,11 +23,11 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('Cancel'),
+            child: const Text('no'),
           ),
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(true),
-            child: const Text('Logout', style: TextStyle(color: Colors.red)),
+            child: const Text('yes', style: TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -48,6 +42,13 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
     if (provider.loading) {
       return Center(
         child: CircularProgressIndicator(),
+      );
+    } else if (provider.isError) {
+      return Center(
+        child: Text(
+          provider.errorMessage!,
+          style: TextStyle(color: Theme.of(context).colorScheme.error),
+        ),
       );
     }
 
@@ -83,11 +84,9 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
                 ),
               ),
             ),
-
           const SizedBox(height: 8),
           _StudentWidget(student: provider.student!),
           const SizedBox(height: 16),
-
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -107,8 +106,8 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
                 padding: const EdgeInsets.symmetric(vertical: 12),
               ),
               child: const Text(
-                "Logout",
-                style: TextStyle(color: Colors.white, fontSize: 16),
+                "LOGOUT",
+                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -121,7 +120,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
 class _StudentWidget extends StatelessWidget {
   final Student student;
 
-  const _StudentWidget({super.key, required this.student});
+  const _StudentWidget({required this.student});
 
   Widget buildInfoRow(String label, String value) {
     return Padding(
@@ -163,12 +162,12 @@ class _StudentWidget extends StatelessWidget {
                     ?.copyWith(color: Theme.of(context).colorScheme.primary),
               ),
               const Divider(color: Colors.green),
-              buildInfoRow('Registration Number', student.registrationNumber),
-              buildInfoRow('Last Name', student.lastName),
               buildInfoRow('First Name', student.firstName),
+              buildInfoRow('Last Name', student.lastName),
+              buildInfoRow('University', student.universityName),
               buildInfoRow('Birth Date', student.birthDate),
               buildInfoRow('Birth Place', student.birthPlace),
-              buildInfoRow('University Name', student.universityName),
+              buildInfoRow('Registration Number', student.registrationNumber),
               const SizedBox(height: 8),
               Text(
                 'Major',

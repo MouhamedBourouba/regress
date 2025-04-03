@@ -6,9 +6,10 @@
 import 'package:flutter/material.dart' show debugPrint;
 import 'package:regress/data/models/bac_data_response_entity.dart';
 import 'package:regress/data/models/groups_response_entity.dart';
+import 'package:regress/data/models/session_token.dart';
 import 'package:regress/data/models/student_bac_info_response_v2_entity.dart';
 import 'package:regress/data/models/student_data_entity.dart';
-import 'package:regress/data/models/session_token.dart';
+import 'package:regress/data/models/student_group_entity.dart';
 
 JsonConvert jsonConvert = JsonConvert();
 
@@ -151,6 +152,10 @@ class JsonConvert {
       return data.map<GroupsResponseEntity>((Map<String, dynamic> e) =>
           GroupsResponseEntity.fromJson(e)).toList() as M;
     }
+    if (<SessionToken>[] is M) {
+      return data.map<SessionToken>((Map<String, dynamic> e) => SessionToken.fromJson(e))
+          .toList() as M;
+    }
     if (<StudentBacInfoResponseV2Entity>[] is M) {
       return data.map<StudentBacInfoResponseV2Entity>((Map<String, dynamic> e) =>
           StudentBacInfoResponseV2Entity.fromJson(e)).toList() as M;
@@ -159,9 +164,9 @@ class JsonConvert {
       return data.map<StudentDataEntity>((Map<String, dynamic> e) => StudentDataEntity.fromJson(e))
           .toList() as M;
     }
-    if (<SessionToken>[] is M) {
-      return data.map<SessionToken>((Map<String, dynamic> e) => SessionToken.fromJson(e))
-          .toList() as M;
+    if (<StudentGroupEntity>[] is M) {
+      return data.map<StudentGroupEntity>((Map<String, dynamic> e) =>
+          StudentGroupEntity.fromJson(e)).toList() as M;
     }
 
     debugPrint("$M not found");
@@ -185,9 +190,10 @@ class JsonConvertClassCollection {
   Map<String, JsonConvertFunction> convertFuncMap = {
     (BacDataResponseEntity).toString(): BacDataResponseEntity.fromJson,
     (GroupsResponseEntity).toString(): GroupsResponseEntity.fromJson,
+    (SessionToken).toString(): SessionToken.fromJson,
     (StudentBacInfoResponseV2Entity).toString(): StudentBacInfoResponseV2Entity.fromJson,
     (StudentDataEntity).toString(): StudentDataEntity.fromJson,
-    (SessionToken).toString(): SessionToken.fromJson,
+    (StudentGroupEntity).toString(): StudentGroupEntity.fromJson,
   };
 
   bool containsKey(String type) {
