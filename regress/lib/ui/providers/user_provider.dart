@@ -12,11 +12,14 @@ class UserProvider extends ChangeNotifier with ErrorProviderMixin {
   UserProvider(this._userRepository);
 
   bool _loading = true;
+  bool _loggedOut = false;
   Student? _student;
   File? _studentImage;
   File? _universityLogo;
 
   bool get loading => _loading;
+
+  bool get loggedOut => _loggedOut;
 
   File? get studentImage => _studentImage;
 
@@ -51,6 +54,12 @@ class UserProvider extends ChangeNotifier with ErrorProviderMixin {
     );
 
     _loading = false;
+    notifyListeners();
+  }
+
+  Future<void> logout() async {
+    await _userRepository.logout();
+    _loggedOut = true;
     notifyListeners();
   }
 }

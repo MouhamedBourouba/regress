@@ -20,6 +20,6 @@ Future<void> configureDI() async {
   gt.registerSingleton<StudentRepository>(UserRepositoryImpl(gt.get(), gt.get(), gt.get()));
 
   // PROVIDERS
-  gt.registerSingleton(AuthProvider(gt.get()));
-  gt.registerSingleton(UserProvider(gt.get()));
+  gt.registerFactory(() => AuthProvider(gt.get()));
+  gt.registerFactory(() => UserProvider(gt.get()));
 }

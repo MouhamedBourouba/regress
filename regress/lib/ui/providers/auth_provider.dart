@@ -90,7 +90,7 @@ class AuthProvider extends ChangeNotifier with ErrorProviderMixin {
     notifyListeners();
   }
 
-  void logout() async {
+  Future<void> logout() async {
     await userRepository.logout();
     _isAuthenticated = false;
     notifyListeners();
