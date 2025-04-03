@@ -16,6 +16,7 @@ Future<void> configureDI() async {
   gt.registerSingleton(ProgressAPI());
   gt.registerSingleton(Base64LocalImageCache(gt.get()));
 
+  // Repositorys
   gt.registerSingleton<StudentRepository>(UserRepositoryImpl(gt.get(), gt.get(), gt.get()));
 
   // PROVIDERS

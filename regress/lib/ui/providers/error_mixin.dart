@@ -4,9 +4,9 @@ mixin ErrorProviderMixin {
 
   String? get errorMessage => _errorMessage;
 
-  bool get hasShownError => _hasShownError;
+  bool get isError => _hasShownError;
 
-  errorShown() => _hasShownError = true;
+  setErrorShown() => _hasShownError = true;
 
   setError(String error) {
     _hasShownError = false;

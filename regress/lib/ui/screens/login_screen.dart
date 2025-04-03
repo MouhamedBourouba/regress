@@ -15,7 +15,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final authProvider = context.watch<AuthProvider>();
 
-    if (authProvider.errorMessage != null && !authProvider.hasShownError) {
+    if (authProvider.errorMessage != null && !authProvider.isError) {
       SchedulerBinding.instance.addPostFrameCallback(
         (_) {
           ScaffoldMessenger.of(context)
@@ -26,7 +26,7 @@ class LoginScreen extends StatelessWidget {
               backgroundColor: Theme.of(context).colorScheme.error,
             ),
           );
-          authProvider.errorShown();
+          authProvider.setErrorShown();
         },
       );
     }

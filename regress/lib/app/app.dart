@@ -7,10 +7,10 @@ import 'package:regress/ui/screens/login_screen.dart';
 
 final brightness = Brightness.light;
 
-final Color primary = Color(0xFF1565C0);
+final Color primary = Colors.green;
 final Color onPrimary = Colors.white;
 
-final Color secondary = Color(0xFFFFC107);
+final Color secondary = Colors.blue;
 final Color onSecondary = Colors.black;
 
 final Color error = Color(0xFFD32F2F);
