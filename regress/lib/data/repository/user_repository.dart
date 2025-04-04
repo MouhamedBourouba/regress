@@ -22,18 +22,10 @@ class UserRepositoryImpl implements StudentRepository {
   UserRepositoryImpl(this._progressAPI, this._imageCache, this._preferences);
 
   @override
-  Future<ResultDart<Unit, String>> login(
-    String registrationNumber,
-    String password,
-  ) async {
+  Future<ResultDart<Unit, String>> login(String registrationNumber, String password) async {
     final res = _progressAPI.login(registrationNumber, password);
-    await res.onSuccess(
-      (success) async => await _preferences.setString(StorageKeys.sessionToken, success.toString()),
-    );
-    return res.fold(
-      (success) => unit.toSuccess(),
-      (error) => error.toFailure(),
-    );
+    await res.onSuccess((success) async => await _preferences.setString(StorageKeys.sessionToken, success.toString()));
+    return res.fold((success) => unit.toSuccess(), (error) => error.toFailure());
   }
 
   @override
@@ -49,9 +41,7 @@ class UserRepositoryImpl implements StudentRepository {
   }
 
   Future<ResultDart<File, Unit>> _fetchAndCacheImage(
-    String imageKey,
-    Future<ResultDart<String, Unit>> Function() fetch,
-  ) async {
+      String imageKey, Future<ResultDart<String, Unit>> Function() fetch) async {
     final cachedImage = _imageCache.loadCachedImage(imageKey);
     if (cachedImage.isSuccess()) return cachedImage.getOrThrow().toSuccess();
 
@@ -59,34 +49,22 @@ class UserRepositoryImpl implements StudentRepository {
     final imageResult = await fetch();
     if (imageResult.isError()) return unit.toFailure();
 
-    final imgFile = await _imageCache.cacheImage(
-      imageResult.getOrThrow(),
-      imageKey,
-    );
+    final imgFile = await _imageCache.cacheImage(imageResult.getOrThrow(), imageKey);
 
     return imgFile.toSuccess();
   }
 
   @override
-  Future<ResultDart<File, Unit>> getUserUniLogo() async => _fetchAndCacheImage(
-        StorageKeys.uniLogo,
-        () {
-          SessionToken sessionToken = _getUserSession();
-          return _progressAPI.fetchUniversityLogo(
-            sessionToken.token,
-            sessionToken.etablissementId.toString(),
-          );
-        },
-      );
+  Future<ResultDart<File, Unit>> getUserUniLogo() async => _fetchAndCacheImage(StorageKeys.uniLogo, () {
+        SessionToken sessionToken = _getUserSession();
+        return _progressAPI.fetchUniversityLogo(sessionToken.token, sessionToken.etablissementId.toString());
+      });
 
   @override
-  Future<ResultDart<File, Unit>> getUserImage() => _fetchAndCacheImage(
-        StorageKeys.studentImage,
-        () {
-          SessionToken sessionToken = _getUserSession();
-          return _progressAPI.fetchUserImage(sessionToken.uuid, sessionToken.token);
-        },
-      );
+  Future<ResultDart<File, Unit>> getUserImage() => _fetchAndCacheImage(StorageKeys.studentImage, () {
+        SessionToken sessionToken = _getUserSession();
+        return _progressAPI.fetchUserImage(sessionToken.uuid, sessionToken.token);
+      });
 
   @override
   Future<ResultDart<Student, String>> getStudentData() async {
@@ -99,38 +77,27 @@ class UserRepositoryImpl implements StudentRepository {
     final sessionToken = _getUserSession();
     final result = _progressAPI.fetchStudentData(sessionToken.token, sessionToken.uuid);
 
-    return await result.fold(
-      (studentDataResponse) {
-        _preferences.setString(StorageKeys.studentData, studentDataResponse.toString());
-        return studentDataResponse.last.toStudent().toSuccess();
-      },
-      (error) => error.toFailure(),
-    );
+    return await result.fold((studentDataResponse) {
+      _preferences.setString(StorageKeys.studentData, studentDataResponse.toString());
+      return studentDataResponse.last.toStudent().toSuccess();
+    }, (error) => error.toFailure());
   }
 
   @override
   Future<ResultDart<List<Group>, String>> getStudentGroups() async {
     if (_preferences.containsKey(StorageKeys.studentGroups)) {
       var thejasn = jsonDecode(_preferences.getString(StorageKeys.studentGroups)!);
-      return (thejasn as List)
-          .map(
-            (e) => StudentGroupEntity.fromJson(e).toGroup(),
-          )
-          .toList()
-          .toSuccess();
+      return (thejasn as List).map((e) => StudentGroupEntity.fromJson(e).toGroup()).toList().toSuccess();
     }
     final theid = await _getStudentId();
     if (theid.isError()) return theid.exceptionOrNull()!.toFailure();
 
     final data = _progressAPI.fetchStudentGroups(_getUserSession().token, theid.getOrThrow());
 
-    return data.fold(
-      (success) {
-        _preferences.setString(StorageKeys.studentGroups, success.toString());
-        return success.map((e) => e.toGroup()).toList(growable: false).toSuccess();
-      },
-      (error) => error.toFailure(),
-    );
+    return data.fold((success) {
+      _preferences.setString(StorageKeys.studentGroups, success.toString());
+      return success.map((e) => e.toGroup()).toList(growable: false).toSuccess();
+    }, (error) => error.toFailure());
   }
 
   Future<ResultDart<String, String>> _getStudentId() async {
