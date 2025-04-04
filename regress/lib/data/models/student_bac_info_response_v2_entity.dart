@@ -4,7 +4,6 @@ import 'package:regress/generated/json/base/json_field.dart';
 import 'package:regress/generated/json/student_bac_info_response_v2_entity.g.dart';
 import 'dart:convert';
 
-import 'package:regress/utils/utils.dart';
 export 'package:regress/generated/json/student_bac_info_response_v2_entity.g.dart';
 
 @JsonSerializable()

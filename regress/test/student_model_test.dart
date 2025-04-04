@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:regress/domain/models/group.dart';
 import 'package:regress/domain/models/major.dart';
 import 'package:regress/domain/models/student.dart';
 

@@ -1,8 +1,5 @@
 import 'package:regress/generated/json/base/json_convert_content.dart';
 import 'package:regress/data/models/bac_data_response_entity.dart';
-import 'package:regress/domain/models/major.dart';
-
-import 'package:regress/domain/models/student.dart';
 
 
 BacDataResponseEntity $BacDataResponseEntityFromJson(Map<String, dynamic> json) {

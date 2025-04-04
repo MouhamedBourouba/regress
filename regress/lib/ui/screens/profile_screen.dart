@@ -46,7 +46,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
     } else if (!provider.loading && provider.student == null) {
       return Center(
         child: Text(
-          provider.errorMessage ?? "Unknown error please try again later",
+          provider.error ?? "Unknown error please try again later",
           style: TextStyle(color: Theme.of(context).colorScheme.error),
         ),
       );

@@ -24,7 +24,7 @@ class _GroupScreenState extends State<GroupScreen> {
     } else if (!provider.loading && provider.studentGroups == null) {
       return Center(
         child: Text(
-          provider.errorMessage ?? "Unknown error please try again later",
+          provider.error ?? "Unknown error please try again later",
           style: TextStyle(color: Theme.of(context).colorScheme.error),
         ),
       );
@@ -43,6 +43,7 @@ class _GroupScreenState extends State<GroupScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           TabBar(
+            dividerColor: Colors.grey.shade300,
             tabs: [
               Tab(child: Text(provider.studentGroups!.first.period)),
               if (provider.studentGroups!.length > 1)
