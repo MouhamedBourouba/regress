@@ -42,11 +42,13 @@ class _GroupScreenState extends State<GroupScreen> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          TabBar(tabs: [
-            Tab(child: Text(provider.studentGroups!.first.period)),
-            if (provider.studentGroups!.length > 1)
-              Tab(child: Text(provider.studentGroups![1].period))
-          ]),
+          TabBar(
+            tabs: [
+              Tab(child: Text(provider.studentGroups!.first.period)),
+              if (provider.studentGroups!.length > 1)
+                Tab(child: Text(provider.studentGroups![1].period))
+            ],
+          ),
           Expanded(
             child: TabBarView(
               children: provider.studentGroups!

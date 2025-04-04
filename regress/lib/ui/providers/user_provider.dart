@@ -4,16 +4,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:regress/domain/models/group.dart';
 import 'package:regress/domain/models/student.dart';
 import 'package:regress/domain/repository/user_data_repository.dart';
-import 'package:regress/ui/providers/error_mixin.dart';
 import 'package:result_dart/result_dart.dart';
 
-class UserProvider extends ChangeNotifier with ErrorProviderMixin {
+class UserProvider extends ChangeNotifier {
   final StudentRepository _userRepository;
 
   UserProvider(this._userRepository);
 
   bool _loading = true;
   bool _loggedOut = false;
+  String? _error;
   Student? _student;
   List<Group>? _studentGroups;
   File? _studentImage;
@@ -22,6 +22,8 @@ class UserProvider extends ChangeNotifier with ErrorProviderMixin {
   bool get loading => _loading;
 
   bool get loggedOut => _loggedOut;
+
+  String? get error => _error;
 
   File? get studentImage => _studentImage;
 
@@ -44,12 +46,12 @@ class UserProvider extends ChangeNotifier with ErrorProviderMixin {
 
     studentData.fold(
       (success) => _student = success,
-      (failure) => setError(failure),
+      (failure) => _error = failure,
     );
 
     studentGroups.fold(
       (success) => _studentGroups = success,
-      (failure) => setError(failure),
+      (failure) => _error = failure
     );
 
     userImage.onSuccess(
