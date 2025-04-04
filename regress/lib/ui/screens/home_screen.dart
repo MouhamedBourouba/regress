@@ -26,8 +26,9 @@ class _HomeScreenState extends State<HomeScreen> {
     Center(child: Text("Subjects")),
     StudentProfileScreen()
   ];
+
   final List<String> _titles = [
-    "Groups",
+    "Groups and sections",
     "Exam Notes",
     "Assessments",
     "Subjects",

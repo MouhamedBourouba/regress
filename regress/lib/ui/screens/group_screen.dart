@@ -1,8 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:regress/domain/models/group.dart';
 import 'package:regress/ui/providers/user_provider.dart';
-import 'package:regress/utils/utils.dart';
 
 class GroupScreen extends StatefulWidget {
   const GroupScreen({super.key});
@@ -20,41 +21,43 @@ class _GroupScreenState extends State<GroupScreen> {
       return Center(
         child: CircularProgressIndicator(),
       );
-    } else if (!provider.loading && provider.student == null) {
+    } else if (!provider.loading && provider.studentGroups == null) {
       return Center(
         child: Text(
           provider.errorMessage ?? "Unknown error please try again later",
           style: TextStyle(color: Theme.of(context).colorScheme.error),
         ),
       );
+    } else if (provider.studentGroups!.isEmpty) {
+      return Center(
+        child: Text(
+          "No Data available please try again later",
+          style: TextStyle(color: Theme.of(context).colorScheme.error),
+        ),
+      );
     }
 
-    final gg = (provider.studentGroups!.length / 2).floor();
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+    return DefaultTabController(
+      length: min(provider.studentGroups!.length, 2),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          _buildYearDivider(1),
+          TabBar(tabs: [
+            Tab(child: Text(provider.studentGroups!.first.period)),
+            if (provider.studentGroups!.length > 1)
+              Tab(child: Text(provider.studentGroups![1].period))
+          ]),
           Expanded(
-            child: ListView.separated(
-              itemCount: (provider.studentGroups!.length / 2).floor(),
-              itemBuilder: (BuildContext context, int index) {
-                return Row(
-                  children: [
-                    Expanded(
-                      child: _buildGroupCard(provider.studentGroups![index]),
-                    ),
-                    Expanded(
-                      child: _buildGroupCard(provider.studentGroups![index + 1]),
-                    )
-                  ],
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return _buildYearDivider(index + 1);
-              },
+            child: TabBarView(
+              children: provider.studentGroups!
+                  .take(2)
+                  .map((e) => Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: SingleChildScrollView(
+                          child: _buildGroup(e),
+                        ),
+                      ))
+                  .toList(),
             ),
           ),
         ],
@@ -62,25 +65,54 @@ class _GroupScreenState extends State<GroupScreen> {
     );
   }
 
-  _buildGroupCard(Group group) => Card(
+  _buildGroup(Group group) {
+    return Card(
+      elevation: 6,
+      borderOnForeground: true,
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Text(group.period),
-            Text(group.number),
-            Text(group.section),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Section",
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelLarge
+                      ?.copyWith(color: Colors.grey.shade700),
+                ),
+                Text(
+                  group.section,
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+              ],
+            ),
+            Divider(color: Colors.grey),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Group",
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelLarge
+                      ?.copyWith(color: Colors.grey.shade700),
+                ),
+                Text(
+                  group.number,
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+              ],
+            ),
+            Divider(color: Colors.grey),
           ],
         ),
-      );
-
-  _buildYearDivider(int year) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "${1.toOrdinal()} Year",
-            style: Theme.of(context).textTheme.titleLarge,
-            textAlign: TextAlign.start,
-          ),
-          Divider()
-        ],
-      );
+      ),
+    );
+  }
 }

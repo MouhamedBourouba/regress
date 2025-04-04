@@ -7,7 +7,7 @@ import 'package:regress/ui/screens/login_screen.dart';
 
 final brightness = Brightness.light;
 
-final Color primary = Colors.green;
+final Color primary = Color(0xFF388E3C);
 final Color onPrimary = Colors.white;
 
 final Color secondary = Colors.blue;
@@ -39,6 +39,17 @@ class RegressApp extends StatelessWidget {
             onError: onError,
             surface: surface,
             onSurface: onSurface,
+          ),
+          appBarTheme: AppBarTheme(
+            backgroundColor: primary,
+            foregroundColor: onPrimary,
+            elevation: 4,
+            centerTitle: true,
+            titleTextStyle: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: onPrimary,
+            ),
           ),
         ),
         themeMode: ThemeMode.light,

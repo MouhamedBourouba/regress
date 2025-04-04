@@ -63,55 +63,57 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          if (provider.studentImage != null)
-            Container(
-              width: 130,
-              height: 130,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: Colors.green,
-                  width: 1.5,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            if (provider.studentImage != null)
+              Container(
+                width: 130,
+                height: 130,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Colors.green,
+                    width: 1.5,
+                  ),
+                ),
+                child: ClipOval(
+                  child: Image.file(
+                    provider.studentImage!,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-              child: ClipOval(
-                child: Image.file(
-                  provider.studentImage!,
-                  fit: BoxFit.cover,
+            const SizedBox(height: 8),
+            _StudentWidget(student: provider.student!),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () async {
+                  final result = await _showLogoutConfirmationDialog(context);
+                  if (result) {
+                    await provider.logout();
+        
+                    if (!mounted) return;
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.error,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(7),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                ),
+                child: const Text(
+                  "LOGOUT",
+                  style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
-          const SizedBox(height: 8),
-          _StudentWidget(student: provider.student!),
-          const SizedBox(height: 16),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () async {
-                final result = await _showLogoutConfirmationDialog(context);
-                if (result) {
-                  await provider.logout();
-
-                  if (!mounted) return;
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.error,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(7),
-                ),
-                padding: const EdgeInsets.symmetric(vertical: 12),
-              ),
-              child: const Text(
-                "LOGOUT",
-                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
