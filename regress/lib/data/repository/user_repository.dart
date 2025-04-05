@@ -5,7 +5,9 @@ import 'package:regress/data/constants.dart';
 import 'package:regress/data/models/session_token.dart';
 import 'package:regress/data/models/student_bac_info_response_v2_entity.dart';
 import 'package:regress/data/models/student_group_entity.dart';
+import 'package:regress/data/models/student_notes_entity.dart';
 import 'package:regress/data/sources/progress_api.dart';
+import 'package:regress/domain/models/exam_notes.dart';
 import 'package:regress/domain/models/group.dart';
 import 'package:regress/domain/models/student.dart';
 import 'package:regress/domain/repository/user_data_repository.dart';
@@ -40,8 +42,7 @@ class UserRepositoryImpl implements StudentRepository {
     return _preferences.containsKey(StorageKeys.sessionToken);
   }
 
-  Future<ResultDart<File, Unit>> _fetchAndCacheImage(
-      String imageKey, Future<ResultDart<String, Unit>> Function() fetch) async {
+  Future<ResultDart<File, Unit>> _fetchAndCacheImage(String imageKey, Future<ResultDart<String, Unit>> Function() fetch) async {
     final cachedImage = _imageCache.loadCachedImage(imageKey);
     if (cachedImage.isSuccess()) return cachedImage.getOrThrow().toSuccess();
 
@@ -94,10 +95,13 @@ class UserRepositoryImpl implements StudentRepository {
 
     final data = _progressAPI.fetchStudentGroups(_getUserSession().token, theid.getOrThrow());
 
-    return data.fold((success) {
-      _preferences.setString(StorageKeys.studentGroups, success.toString());
-      return success.map((e) => e.toGroup()).toList(growable: false).toSuccess();
-    }, (error) => error.toFailure());
+    return data.fold(
+      (success) {
+        _preferences.setString(StorageKeys.studentGroups, success.toString());
+        return success.map((e) => e.toGroup()).toList(growable: false).toSuccess();
+      },
+      (error) => error.toFailure(),
+    );
   }
 
   Future<ResultDart<String, String>> _getStudentId() async {
@@ -116,5 +120,25 @@ class UserRepositoryImpl implements StudentRepository {
   SessionToken _getUserSession() {
     assert(isAuthenticated());
     return SessionToken.fromJson(jsonDecode(_preferences.getString(StorageKeys.sessionToken)!));
+  }
+
+  @override
+  Future<ResultDart<List<ExamNotes>, String>> getStudentNotes() async {
+    if (_preferences.containsKey(StorageKeys.studentNotes)) {
+      var thejasn = jsonDecode(_preferences.getString(StorageKeys.studentNotes)!);
+      return (thejasn as List).map((e) => StudentNotesEntity.fromJson(e).toNotes()).toList().toSuccess();
+    }
+    final theid = await _getStudentId();
+    if (theid.isError()) return theid.exceptionOrNull()!.toFailure();
+
+    final data = _progressAPI.fetchStudentGrades(_getUserSession().token, theid.getOrThrow());
+
+    return data.fold(
+      (success) {
+        _preferences.setString(StorageKeys.studentNotes, success.toString());
+        return success.map((e) => e.toNotes()).toList(growable: false).toSuccess();
+      },
+      (error) => error.toFailure(),
+    );
   }
 }

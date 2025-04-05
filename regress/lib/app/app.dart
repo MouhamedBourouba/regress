@@ -54,9 +54,7 @@ class RegressApp extends StatelessWidget {
         ),
         themeMode: ThemeMode.light,
         home: Builder(builder: (context) {
-          return context.read<AuthProvider>().checkAuthentication()
-              ? HomeScreen()
-              : LoginScreen();
+          return context.read<AuthProvider>().checkAuthentication() ? HomeScreen() : LoginScreen();
         }),
       ),
     );

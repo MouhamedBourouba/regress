@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:regress/domain/models/exam_notes.dart';
 import 'package:regress/domain/models/group.dart';
 import 'package:regress/domain/models/student.dart';
 import 'package:regress/domain/repository/user_data_repository.dart';
@@ -18,6 +19,7 @@ class UserProvider extends ChangeNotifier {
   List<Group>? _studentGroups;
   File? _studentImage;
   File? _universityLogo;
+  List<ExamNotes>? _studentNotes;
 
   bool get loading => _loading;
 
@@ -33,16 +35,20 @@ class UserProvider extends ChangeNotifier {
 
   List<Group>? get studentGroups => _studentGroups;
 
+  List<ExamNotes>? get studentNotes => _studentNotes;
+
   Future<void> loadData() async {
     final studentData = _userRepository.getStudentData();
     final userImage = _userRepository.getUserImage();
     final studentGroups = _userRepository.getStudentGroups();
     final uniLogo = _userRepository.getUserUniLogo();
+    final studentNotes = _userRepository.getStudentNotes();
 
     await userImage;
     await uniLogo;
     await studentData;
     await studentGroups;
+    await studentNotes;
 
     studentData.fold(
       (success) => _student = success,
@@ -51,7 +57,12 @@ class UserProvider extends ChangeNotifier {
 
     studentGroups.fold(
       (success) => _studentGroups = success,
-      (failure) => _error = failure
+      (failure) => _error = failure,
+    );
+
+    studentNotes.fold(
+      (success) => _studentNotes = success,
+      (failure) => _error = failure,
     );
 
     userImage.onSuccess(

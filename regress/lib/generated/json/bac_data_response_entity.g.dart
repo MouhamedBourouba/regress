@@ -1,7 +1,6 @@
 import 'package:regress/generated/json/base/json_convert_content.dart';
 import 'package:regress/data/models/bac_data_response_entity.dart';
 
-
 BacDataResponseEntity $BacDataResponseEntityFromJson(Map<String, dynamic> json) {
   final BacDataResponseEntity bacDataResponseEntity = BacDataResponseEntity();
   final double? id = jsonConvert.convert<double>(json['id']);
@@ -32,8 +31,7 @@ BacDataResponseEntity $BacDataResponseEntityFromJson(Map<String, dynamic> json) 
   if (numeroMatricule != null) {
     bacDataResponseEntity.numeroMatricule = numeroMatricule;
   }
-  final double? ouvertureOffreFormationId = jsonConvert.convert<double>(
-      json['ouvertureOffreFormationId']);
+  final double? ouvertureOffreFormationId = jsonConvert.convert<double>(json['ouvertureOffreFormationId']);
   if (ouvertureOffreFormationId != null) {
     bacDataResponseEntity.ouvertureOffreFormationId = ouvertureOffreFormationId;
   }
@@ -113,8 +111,7 @@ BacDataResponseEntity $BacDataResponseEntityFromJson(Map<String, dynamic> json) 
   if (individuLieuNaissance != null) {
     bacDataResponseEntity.individuLieuNaissance = individuLieuNaissance;
   }
-  final String? individuLieuNaissanceArabe = jsonConvert.convert<String>(
-      json['individuLieuNaissanceArabe']);
+  final String? individuLieuNaissanceArabe = jsonConvert.convert<String>(json['individuLieuNaissanceArabe']);
   if (individuLieuNaissanceArabe != null) {
     bacDataResponseEntity.individuLieuNaissanceArabe = individuLieuNaissanceArabe;
   }

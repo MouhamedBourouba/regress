@@ -50,5 +50,3 @@ class Student {
     return jsonEncode(toJson());
   }
 }
-
-

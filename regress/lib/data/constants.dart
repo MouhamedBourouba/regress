@@ -4,7 +4,7 @@ class StorageKeys {
   static const studentData = "user_data";
   static const studentGroups = "student_groups";
   static const sessionToken = "session_key";
+  static const studentNotes = "student_exam_notes";
 
   static List<String> get keys => [uniLogo, studentImage, sessionToken, studentData];
 }
-

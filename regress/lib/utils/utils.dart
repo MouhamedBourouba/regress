@@ -7,7 +7,7 @@ bool isNumeric(String value) {
 
 extension GlobalExtentions on Object? {
   String toStringOr([String defaultValue = ""]) {
-    if(this == null) return defaultValue;
+    if (this == null) return defaultValue;
     return toString();
   }
 }

@@ -10,12 +10,14 @@ import 'package:regress/data/models/session_token.dart';
 import 'package:regress/data/models/student_bac_info_response_v2_entity.dart';
 import 'package:regress/data/models/student_data_entity.dart';
 import 'package:regress/data/models/student_group_entity.dart';
+import 'package:regress/data/models/student_notes_entity.dart';
 
 JsonConvert jsonConvert = JsonConvert();
 
 typedef JsonConvertFunction<T> = T Function(Map<String, dynamic> json);
 typedef EnumConvertFunction<T> = T Function(String value);
 typedef ConvertExceptionHandler = void Function(Object error, StackTrace stackTrace);
+
 extension MapSafeExt<K, V> on Map<K, V> {
   T? getOrNull<T>(K? key) {
     if (!containsKey(key) || key == null) {
@@ -87,9 +89,7 @@ class JsonConvert {
       return null;
     }
     try {
-      return (value as List<dynamic>)
-          .map((dynamic e) => _asT<T>(e, enumConvert: enumConvert)!)
-          .toList();
+      return (value as List<dynamic>).map((dynamic e) => _asT<T>(e, enumConvert: enumConvert)!).toList();
     } catch (e, stackTrace) {
       debugPrint('asT<$T> $e $stackTrace');
       if (onError != null) {
@@ -99,8 +99,7 @@ class JsonConvert {
     }
   }
 
-  T? _asT<T extends Object?>(dynamic value,
-      {EnumConvertFunction? enumConvert}) {
+  T? _asT<T extends Object?>(dynamic value, {EnumConvertFunction? enumConvert}) {
     final String type = T.toString();
     final String valueS = value.toString();
     if (enumConvert != null) {
@@ -145,28 +144,27 @@ class JsonConvert {
   //list is returned by type
   static M? _getListChildType<M>(List<Map<String, dynamic>> data) {
     if (<BacDataResponseEntity>[] is M) {
-      return data.map<BacDataResponseEntity>((Map<String, dynamic> e) =>
-          BacDataResponseEntity.fromJson(e)).toList() as M;
+      return data.map<BacDataResponseEntity>((Map<String, dynamic> e) => BacDataResponseEntity.fromJson(e)).toList() as M;
     }
     if (<GroupsResponseEntity>[] is M) {
-      return data.map<GroupsResponseEntity>((Map<String, dynamic> e) =>
-          GroupsResponseEntity.fromJson(e)).toList() as M;
+      return data.map<GroupsResponseEntity>((Map<String, dynamic> e) => GroupsResponseEntity.fromJson(e)).toList() as M;
     }
     if (<SessionToken>[] is M) {
-      return data.map<SessionToken>((Map<String, dynamic> e) => SessionToken.fromJson(e))
-          .toList() as M;
+      return data.map<SessionToken>((Map<String, dynamic> e) => SessionToken.fromJson(e)).toList() as M;
     }
     if (<StudentBacInfoResponseV2Entity>[] is M) {
-      return data.map<StudentBacInfoResponseV2Entity>((Map<String, dynamic> e) =>
-          StudentBacInfoResponseV2Entity.fromJson(e)).toList() as M;
-    }
-    if (<StudentDataEntity>[] is M) {
-      return data.map<StudentDataEntity>((Map<String, dynamic> e) => StudentDataEntity.fromJson(e))
+      return data
+          .map<StudentBacInfoResponseV2Entity>((Map<String, dynamic> e) => StudentBacInfoResponseV2Entity.fromJson(e))
           .toList() as M;
     }
+    if (<StudentDataEntity>[] is M) {
+      return data.map<StudentDataEntity>((Map<String, dynamic> e) => StudentDataEntity.fromJson(e)).toList() as M;
+    }
     if (<StudentGroupEntity>[] is M) {
-      return data.map<StudentGroupEntity>((Map<String, dynamic> e) =>
-          StudentGroupEntity.fromJson(e)).toList() as M;
+      return data.map<StudentGroupEntity>((Map<String, dynamic> e) => StudentGroupEntity.fromJson(e)).toList() as M;
+    }
+    if (<StudentNotesEntity>[] is M) {
+      return data.map<StudentNotesEntity>((Map<String, dynamic> e) => StudentNotesEntity.fromJson(e)).toList() as M;
     }
 
     debugPrint("$M not found");
@@ -194,6 +192,7 @@ class JsonConvertClassCollection {
     (StudentBacInfoResponseV2Entity).toString(): StudentBacInfoResponseV2Entity.fromJson,
     (StudentDataEntity).toString(): StudentDataEntity.fromJson,
     (StudentGroupEntity).toString(): StudentGroupEntity.fromJson,
+    (StudentNotesEntity).toString(): StudentNotesEntity.fromJson,
   };
 
   bool containsKey(String type) {

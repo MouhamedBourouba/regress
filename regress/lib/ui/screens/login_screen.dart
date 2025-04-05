@@ -21,8 +21,7 @@ class LoginScreen extends StatelessWidget {
 
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(
-            SnackBar(content: Text(authProvider.errorMessage!), backgroundColor: Theme.of(context).colorScheme.error));
+        ).showSnackBar(SnackBar(content: Text(authProvider.errorMessage!), backgroundColor: Theme.of(context).colorScheme.error));
         authProvider.setErrorShown();
       });
     }
@@ -87,10 +86,8 @@ class _LoginForm extends StatelessWidget {
             const SizedBox(height: 6),
             Text(
               "Student Portal",
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(fontWeight: FontWeight.bold, fontSize: 22, letterSpacing: 1.2),
+              style:
+                  Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, fontSize: 22, letterSpacing: 1.2),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),

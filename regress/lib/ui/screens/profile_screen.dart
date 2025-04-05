@@ -95,7 +95,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
                   final result = await _showLogoutConfirmationDialog(context);
                   if (result) {
                     await provider.logout();
-        
+
                     if (!mounted) return;
                   }
                 },
@@ -158,10 +158,7 @@ class _StudentWidget extends StatelessWidget {
             children: [
               Text(
                 "General information",
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
               ),
               const Divider(color: Colors.green),
               buildInfoRow('First Name', student.firstName),
@@ -173,10 +170,7 @@ class _StudentWidget extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 'Major',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
               ),
               const Divider(color: Colors.green),
               buildInfoRow('Domain', student.major.domain),

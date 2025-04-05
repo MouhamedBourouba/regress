@@ -78,11 +78,7 @@ class AuthProvider extends ChangeNotifier with ErrorProviderMixin {
   }
 
   VoidCallback? onButtonClick() {
-    return isNumeric(_registrationNumber) &&
-            _password.length >= 4 &&
-            _registrationNumber.length >= 5
-        ? _login
-        : null;
+    return isNumeric(_registrationNumber) && _password.length >= 4 && _registrationNumber.length >= 5 ? _login : null;
   }
 
   void onVisibilityClicked() {

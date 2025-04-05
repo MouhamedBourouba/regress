@@ -46,8 +46,7 @@ class _GroupScreenState extends State<GroupScreen> {
             dividerColor: Colors.grey.shade300,
             tabs: [
               Tab(child: Text(provider.studentGroups!.first.period)),
-              if (provider.studentGroups!.length > 1)
-                Tab(child: Text(provider.studentGroups![1].period))
+              if (provider.studentGroups!.length > 1) Tab(child: Text(provider.studentGroups![1].period))
             ],
           ),
           Expanded(
@@ -83,10 +82,7 @@ class _GroupScreenState extends State<GroupScreen> {
               children: [
                 Text(
                   "Section",
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelLarge
-                      ?.copyWith(color: Colors.grey.shade700),
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.grey.shade700),
                 ),
                 Text(
                   group.section,
@@ -101,10 +97,7 @@ class _GroupScreenState extends State<GroupScreen> {
               children: [
                 Text(
                   "Group",
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelLarge
-                      ?.copyWith(color: Colors.grey.shade700),
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.grey.shade700),
                 ),
                 Text(
                   group.number,

@@ -57,8 +57,7 @@ class BacDataResponseEntity {
 
   BacDataResponseEntity();
 
-  factory BacDataResponseEntity.fromJson(Map<String, dynamic> json) =>
-      $BacDataResponseEntityFromJson(json);
+  factory BacDataResponseEntity.fromJson(Map<String, dynamic> json) => $BacDataResponseEntityFromJson(json);
 
   Map<String, dynamic> toJson() => $BacDataResponseEntityToJson(this);
 
