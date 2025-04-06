@@ -87,17 +87,20 @@ class ProgressAPI {
   }
 
   // https://progres.mesrs.dz/api/infos/planningSession/dia/{{student id}}/noteExamens
-  Future<ResultDart<List<StudentNotesEntity>, String>> fetchStudentGrades(
+  Future<List<ResultDart<Iterable<StudentNotesEntity>, String>>> fetchStudentGrades(
     String jwt,
-    String studentId,
-  ) {
-    return _get(jwt, "planningSession/dia/$studentId/noteExamens").fold(
-      (data) {
-        final decodedJson = jsonDecode(utf8.decode(data.bodyBytes));
-        return (decodedJson as List).map((note) => StudentNotesEntity.fromJson(note)).toList().toSuccess();
-      },
-      (error) => error.toFailure(),
-    );
+    Iterable<String> studentSemesterIds,
+  ) async {
+    final requests = studentSemesterIds.map<Future<ResultDart<List<StudentNotesEntity>, String>>>((e) {
+      return _get(jwt, "planningSession/dia/$e/noteExamens").fold(
+        (data) {
+          final decodedJson = jsonDecode(utf8.decode(data.bodyBytes));
+          return (decodedJson as List).map((note) => StudentNotesEntity.fromJson(note)).toList().toSuccess();
+        },
+        (error) => error.toFailure(),
+      );
+    });
+    return Future.wait(requests);
   }
 
   // https://progres.mesrs.dz/api/authentication/v1/
@@ -106,10 +109,10 @@ class ProgressAPI {
     String password,
   ) async {
     Uri uri = Uri.parse("$_baseUrl/authentication/v1/");
-
+    final headers = {"Content-Type": "application/json"};
     try {
       final body = """{"username": "$registrationNumber","password": "$password"}""";
-      final response = await http.post(uri, body: body);
+      final response = await http.post(uri, body: body, headers: headers);
       if (response.statusCode == 200) {
         return (SessionToken.fromJson(jsonDecode(response.body)).toSuccess());
       } else {

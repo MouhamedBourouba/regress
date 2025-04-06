@@ -60,10 +60,10 @@ class UserProvider extends ChangeNotifier {
       (failure) => _error = failure,
     );
 
-    studentNotes.fold(
-      (success) => _studentNotes = success,
-      (failure) => _error = failure,
-    );
+    // studentNotes.fold(
+    //   (success) => _studentNotes = success,
+    //   (failure) => _error = failure,
+    // );
 
     userImage.onSuccess(
       (success) {

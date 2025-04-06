@@ -90,10 +90,10 @@ class UserRepositoryImpl implements StudentRepository {
       var thejasn = jsonDecode(_preferences.getString(StorageKeys.studentGroups)!);
       return (thejasn as List).map((e) => StudentGroupEntity.fromJson(e).toGroup()).toList().toSuccess();
     }
-    final theid = await _getStudentId();
+    final theid = await _getStudentSemesterIds();
     if (theid.isError()) return theid.exceptionOrNull()!.toFailure();
 
-    final data = _progressAPI.fetchStudentGroups(_getUserSession().token, theid.getOrThrow());
+    final data = _progressAPI.fetchStudentGroups(_getUserSession().token, theid.getOrThrow().last);
 
     return data.fold(
       (success) {
@@ -104,7 +104,7 @@ class UserRepositoryImpl implements StudentRepository {
     );
   }
 
-  Future<ResultDart<String, String>> _getStudentId() async {
+  Future<ResultDart<Iterable<String>, String>> _getStudentSemesterIds() async {
     if (!_preferences.containsKey(StorageKeys.studentData)) {
       final result = await getStudentData();
       if (result.isError()) {
@@ -112,9 +112,9 @@ class UserRepositoryImpl implements StudentRepository {
       }
     }
     var jason = jsonDecode(_preferences.getString(StorageKeys.studentData)!);
-    if (jason is List) jason = jason.last;
-    final theIDD = jason["id"].toString();
-    return theIDD.toSuccess();
+    if (jason is! List) jason = [jason];
+
+    return (jason).map((e) => e["id"].toString()).toSuccess();
   }
 
   SessionToken _getUserSession() {
@@ -123,22 +123,38 @@ class UserRepositoryImpl implements StudentRepository {
   }
 
   @override
-  Future<ResultDart<List<ExamNotes>, String>> getStudentNotes() async {
+  Future<List<ResultDart<List<ExamNotes>, String>>> getStudentNotes() async {
     if (_preferences.containsKey(StorageKeys.studentNotes)) {
-      var thejasn = jsonDecode(_preferences.getString(StorageKeys.studentNotes)!);
-      return (thejasn as List).map((e) => StudentNotesEntity.fromJson(e).toNotes()).toList().toSuccess();
+      final cachedString = _preferences.getString(StorageKeys.studentNotes)!;
+      final jason = jsonDecode(cachedString);
+
+      if (jason is List<List<Map<String, dynamic>>>) {
+        return jason.map((exams) {
+          return exams
+              .map((exam) {
+                return StudentNotesEntity.fromJson(exam).toNotes();
+              })
+              .toList()
+              .toSuccess<String>();
+        }).toList();
+      }
     }
-    final theid = await _getStudentId();
-    if (theid.isError()) return theid.exceptionOrNull()!.toFailure();
+    final theid = await _getStudentSemesterIds();
+    if (theid.isError()) return [theid.exceptionOrNull()!.toFailure()];
 
-    final data = _progressAPI.fetchStudentGrades(_getUserSession().token, theid.getOrThrow());
-
-    return data.fold(
-      (success) {
-        _preferences.setString(StorageKeys.studentNotes, success.toString());
-        return success.map((e) => e.toNotes()).toList(growable: false).toSuccess();
-      },
-      (error) => error.toFailure(),
-    );
+    final data = await _progressAPI.fetchStudentGrades(_getUserSession().token, theid.getOrThrow());
+    return data.map((e) {
+      final ResultDart<List<ExamNotes>, String> result = e.fold(
+        (success) {
+          var decoded = jsonDecode(_preferences.getString(StorageKeys.studentNotes) ?? "[]");
+          if (decoded is! List) decoded = [decoded];
+          decoded.add(success.toList());
+          _preferences.setString(StorageKeys.studentNotes, decoded.toString());
+          return success.map((e) => e.toNotes()).toList(growable: false).toSuccess();
+        },
+        (error) => error.toFailure(),
+      );
+      return result;
+    }).toList();
   }
 }
