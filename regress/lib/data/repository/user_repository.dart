@@ -139,14 +139,13 @@ class UserRepositoryImpl implements StudentRepository {
         try {
           final jason = jsonDecode(cachedString);
           if (jason is List<dynamic>) {
-            return jason
+            return (jason as List<List<dynamic>>)
                 .map((exams) {
                   return exams.map((exam) {
                     return StudentNotesEntity.fromJson(exam).toNotes();
                   }).toList();
                 })
-                .toList()
-                .cast();
+                .toList();
           } else {
             return null;
           }
@@ -169,8 +168,7 @@ class UserRepositoryImpl implements StudentRepository {
         _preferences.setString(StorageKeys.studentNotes, jsonEncode(notes).toString());
         return notes
             .map<List<ExamNotes>>(
-              (notesList) {
-                return notesList.map((note) => note.toNotes()).toList();
+              (notesList) { return notesList.map((note) => note.toNotes()).toList();
               },
             )
             .toList()
