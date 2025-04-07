@@ -89,7 +89,9 @@ class JsonConvert {
       return null;
     }
     try {
-      return (value as List<dynamic>).map((dynamic e) => _asT<T>(e, enumConvert: enumConvert)!).toList();
+      return (value as List<dynamic>)
+          .map((dynamic e) => _asT<T>(e, enumConvert: enumConvert)!)
+          .toList();
     } catch (e, stackTrace) {
       debugPrint('asT<$T> $e $stackTrace');
       if (onError != null) {
@@ -144,27 +146,39 @@ class JsonConvert {
   //list is returned by type
   static M? _getListChildType<M>(List<Map<String, dynamic>> data) {
     if (<BacDataResponseEntity>[] is M) {
-      return data.map<BacDataResponseEntity>((Map<String, dynamic> e) => BacDataResponseEntity.fromJson(e)).toList() as M;
+      return data
+          .map<BacDataResponseEntity>((Map<String, dynamic> e) => BacDataResponseEntity.fromJson(e))
+          .toList() as M;
     }
     if (<GroupsResponseEntity>[] is M) {
-      return data.map<GroupsResponseEntity>((Map<String, dynamic> e) => GroupsResponseEntity.fromJson(e)).toList() as M;
+      return data
+          .map<GroupsResponseEntity>((Map<String, dynamic> e) => GroupsResponseEntity.fromJson(e))
+          .toList() as M;
     }
     if (<SessionToken>[] is M) {
-      return data.map<SessionToken>((Map<String, dynamic> e) => SessionToken.fromJson(e)).toList() as M;
+      return data.map<SessionToken>((Map<String, dynamic> e) => SessionToken.fromJson(e)).toList()
+          as M;
     }
     if (<StudentBacInfoResponseV2Entity>[] is M) {
       return data
-          .map<StudentBacInfoResponseV2Entity>((Map<String, dynamic> e) => StudentBacInfoResponseV2Entity.fromJson(e))
+          .map<StudentBacInfoResponseV2Entity>(
+              (Map<String, dynamic> e) => StudentBacInfoResponseV2Entity.fromJson(e))
           .toList() as M;
     }
     if (<StudentDataEntity>[] is M) {
-      return data.map<StudentDataEntity>((Map<String, dynamic> e) => StudentDataEntity.fromJson(e)).toList() as M;
+      return data
+          .map<StudentDataEntity>((Map<String, dynamic> e) => StudentDataEntity.fromJson(e))
+          .toList() as M;
     }
     if (<StudentGroupEntity>[] is M) {
-      return data.map<StudentGroupEntity>((Map<String, dynamic> e) => StudentGroupEntity.fromJson(e)).toList() as M;
+      return data
+          .map<StudentGroupEntity>((Map<String, dynamic> e) => StudentGroupEntity.fromJson(e))
+          .toList() as M;
     }
     if (<StudentNotesEntity>[] is M) {
-      return data.map<StudentNotesEntity>((Map<String, dynamic> e) => StudentNotesEntity.fromJson(e)).toList() as M;
+      return data
+          .map<StudentNotesEntity>((Map<String, dynamic> e) => StudentNotesEntity.fromJson(e))
+          .toList() as M;
     }
 
     debugPrint("$M not found");

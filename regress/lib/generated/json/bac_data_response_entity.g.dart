@@ -31,7 +31,8 @@ BacDataResponseEntity $BacDataResponseEntityFromJson(Map<String, dynamic> json) 
   if (numeroMatricule != null) {
     bacDataResponseEntity.numeroMatricule = numeroMatricule;
   }
-  final double? ouvertureOffreFormationId = jsonConvert.convert<double>(json['ouvertureOffreFormationId']);
+  final double? ouvertureOffreFormationId =
+      jsonConvert.convert<double>(json['ouvertureOffreFormationId']);
   if (ouvertureOffreFormationId != null) {
     bacDataResponseEntity.ouvertureOffreFormationId = ouvertureOffreFormationId;
   }
@@ -111,7 +112,8 @@ BacDataResponseEntity $BacDataResponseEntityFromJson(Map<String, dynamic> json) 
   if (individuLieuNaissance != null) {
     bacDataResponseEntity.individuLieuNaissance = individuLieuNaissance;
   }
-  final String? individuLieuNaissanceArabe = jsonConvert.convert<String>(json['individuLieuNaissanceArabe']);
+  final String? individuLieuNaissanceArabe =
+      jsonConvert.convert<String>(json['individuLieuNaissanceArabe']);
   if (individuLieuNaissanceArabe != null) {
     bacDataResponseEntity.individuLieuNaissanceArabe = individuLieuNaissanceArabe;
   }

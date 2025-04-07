@@ -2,7 +2,8 @@ import 'package:regress/generated/json/base/json_convert_content.dart';
 import 'package:regress/data/models/student_bac_info_response_v2_entity.dart';
 
 StudentBacInfoResponseV2Entity $StudentBacInfoResponseV2EntityFromJson(Map<String, dynamic> json) {
-  final StudentBacInfoResponseV2Entity studentBacInfoResponseV2Entity = StudentBacInfoResponseV2Entity();
+  final StudentBacInfoResponseV2Entity studentBacInfoResponseV2Entity =
+      StudentBacInfoResponseV2Entity();
   final String? anneeAcademiqueCode = jsonConvert.convert<String>(json['anneeAcademiqueCode']);
   if (anneeAcademiqueCode != null) {
     studentBacInfoResponseV2Entity.anneeAcademiqueCode = anneeAcademiqueCode;
@@ -23,7 +24,8 @@ StudentBacInfoResponseV2Entity $StudentBacInfoResponseV2EntityFromJson(Map<Strin
   if (individuLieuNaissance != null) {
     studentBacInfoResponseV2Entity.individuLieuNaissance = individuLieuNaissance;
   }
-  final String? individuLieuNaissanceArabe = jsonConvert.convert<String>(json['individuLieuNaissanceArabe']);
+  final String? individuLieuNaissanceArabe =
+      jsonConvert.convert<String>(json['individuLieuNaissanceArabe']);
   if (individuLieuNaissanceArabe != null) {
     studentBacInfoResponseV2Entity.individuLieuNaissanceArabe = individuLieuNaissanceArabe;
   }
@@ -83,7 +85,8 @@ StudentBacInfoResponseV2Entity $StudentBacInfoResponseV2EntityFromJson(Map<Strin
   if (ofLlFiliereArabe != null) {
     studentBacInfoResponseV2Entity.ofLlFiliereArabe = ofLlFiliereArabe;
   }
-  final int? ouvertureOffreFormationId = jsonConvert.convert<int>(json['ouvertureOffreFormationId']);
+  final int? ouvertureOffreFormationId =
+      jsonConvert.convert<int>(json['ouvertureOffreFormationId']);
   if (ouvertureOffreFormationId != null) {
     studentBacInfoResponseV2Entity.ouvertureOffreFormationId = ouvertureOffreFormationId;
   }

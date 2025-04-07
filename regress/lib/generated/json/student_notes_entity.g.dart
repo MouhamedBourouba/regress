@@ -3,7 +3,8 @@ import 'package:regress/data/models/student_notes_entity.dart';
 
 StudentNotesEntity $StudentNotesEntityFromJson(Map<String, dynamic> json) {
   final StudentNotesEntity studentNotesEntity = StudentNotesEntity();
-  final bool? autorisationDemandeRecours = jsonConvert.convert<bool>(json['autorisationDemandeRecours']);
+  final bool? autorisationDemandeRecours =
+      jsonConvert.convert<bool>(json['autorisationDemandeRecours']);
   if (autorisationDemandeRecours != null) {
     studentNotesEntity.autorisationDemandeRecours = autorisationDemandeRecours;
   }
@@ -11,7 +12,8 @@ StudentNotesEntity $StudentNotesEntityFromJson(Map<String, dynamic> json) {
   if (dateDebutDepotRecours != null) {
     studentNotesEntity.dateDebutDepotRecours = dateDebutDepotRecours;
   }
-  final String? dateLimiteDepotRecours = jsonConvert.convert<String>(json['dateLimiteDepotRecours']);
+  final String? dateLimiteDepotRecours =
+      jsonConvert.convert<String>(json['dateLimiteDepotRecours']);
   if (dateLimiteDepotRecours != null) {
     studentNotesEntity.dateLimiteDepotRecours = dateLimiteDepotRecours;
   }
@@ -43,11 +45,13 @@ StudentNotesEntity $StudentNotesEntityFromJson(Map<String, dynamic> json) {
   if (planningSessionId != null) {
     studentNotesEntity.planningSessionId = planningSessionId;
   }
-  final String? planningSessionIntitule = jsonConvert.convert<String>(json['planningSessionIntitule']);
+  final String? planningSessionIntitule =
+      jsonConvert.convert<String>(json['planningSessionIntitule']);
   if (planningSessionIntitule != null) {
     studentNotesEntity.planningSessionIntitule = planningSessionIntitule;
   }
-  final double? rattachementMcCoefficient = jsonConvert.convert<double>(json['rattachementMcCoefficient']);
+  final double? rattachementMcCoefficient =
+      jsonConvert.convert<double>(json['rattachementMcCoefficient']);
   if (rattachementMcCoefficient != null) {
     studentNotesEntity.rattachementMcCoefficient = rattachementMcCoefficient;
   }

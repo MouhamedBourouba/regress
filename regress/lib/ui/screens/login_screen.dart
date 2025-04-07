@@ -21,14 +21,17 @@ class LoginScreen extends StatelessWidget {
 
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text(authProvider.errorMessage!), backgroundColor: Theme.of(context).colorScheme.error));
+        ).showSnackBar(SnackBar(
+            content: Text(authProvider.errorMessage!),
+            backgroundColor: Theme.of(context).colorScheme.error));
         authProvider.setErrorShown();
       });
     }
 
     if (authProvider.isAuthenticated) {
       SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HomeScreen()), (route) => false);
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => HomeScreen()), (route) => false);
       });
     }
 
@@ -41,7 +44,9 @@ class LoginScreen extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(24.0),
                 child: MediaQuery.of(context).size.width > maxFormWidth
-                    ? Card(elevation: 10, child: Padding(padding: const EdgeInsets.all(16), child: _LoginForm()))
+                    ? Card(
+                        elevation: 10,
+                        child: Padding(padding: const EdgeInsets.all(16), child: _LoginForm()))
                     : _LoginForm(),
               ),
             ),
@@ -54,10 +59,13 @@ class LoginScreen extends StatelessWidget {
                 child: Center(
                   child: Container(
                     padding: EdgeInsets.all(20),
-                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
-                    child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [CircularProgressIndicator(), SizedBox(width: 20), Text("Login in...")]),
+                    decoration:
+                        BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
+                    child: Row(mainAxisSize: MainAxisSize.min, children: [
+                      CircularProgressIndicator(),
+                      SizedBox(width: 20),
+                      Text("Login in...")
+                    ]),
                   ),
                 ),
               ),
@@ -86,13 +94,16 @@ class _LoginForm extends StatelessWidget {
             const SizedBox(height: 6),
             Text(
               "Student Portal",
-              style:
-                  Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, fontSize: 22, letterSpacing: 1.2),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge
+                  ?.copyWith(fontWeight: FontWeight.bold, fontSize: 22, letterSpacing: 1.2),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
             TextFormField(
-              decoration: InputDecoration(hintText: "Registration number", prefixIcon: Icon(Icons.account_box)),
+              decoration: InputDecoration(
+                  hintText: "Registration number", prefixIcon: Icon(Icons.account_box)),
               onChanged: authProvider.onRegistrationNumberChanged,
               validator: authProvider.validateRegistrationNumber,
               keyboardType: TextInputType.number,
@@ -104,7 +115,8 @@ class _LoginForm extends StatelessWidget {
                 prefixIcon: Icon(Icons.lock),
                 suffixIcon: IconButton(
                   onPressed: authProvider.onVisibilityClicked,
-                  icon: authProvider.visibility ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
+                  icon:
+                      authProvider.visibility ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
                 ),
               ),
               obscureText: !authProvider.visibility,

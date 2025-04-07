@@ -13,7 +13,8 @@ class GroupsResponseEntity {
 
   GroupsResponseEntity();
 
-  factory GroupsResponseEntity.fromJson(Map<String, dynamic> json) => $GroupsResponseEntityFromJson(json);
+  factory GroupsResponseEntity.fromJson(Map<String, dynamic> json) =>
+      $GroupsResponseEntityFromJson(json);
 
   Map<String, dynamic> toJson() => $GroupsResponseEntityToJson(this);
 

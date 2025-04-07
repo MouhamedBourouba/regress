@@ -26,7 +26,8 @@ class UserRepositoryImpl implements StudentRepository {
   @override
   Future<ResultDart<Unit, String>> login(String registrationNumber, String password) async {
     final res = _progressAPI.login(registrationNumber, password);
-    await res.onSuccess((success) async => await _preferences.setString(StorageKeys.sessionToken, success.toString()));
+    await res.onSuccess((success) async =>
+        await _preferences.setString(StorageKeys.sessionToken, success.toString()));
     return res.fold((success) => unit.toSuccess(), (error) => error.toFailure());
   }
 
@@ -42,7 +43,8 @@ class UserRepositoryImpl implements StudentRepository {
     return _preferences.containsKey(StorageKeys.sessionToken);
   }
 
-  Future<ResultDart<File, Unit>> _fetchAndCacheImage(String imageKey, Future<ResultDart<String, Unit>> Function() fetch) async {
+  Future<ResultDart<File, Unit>> _fetchAndCacheImage(
+      String imageKey, Future<ResultDart<String, Unit>> Function() fetch) async {
     final cachedImage = _imageCache.loadCachedImage(imageKey);
     if (cachedImage.isSuccess()) return cachedImage.getOrThrow().toSuccess();
 
@@ -56,13 +58,16 @@ class UserRepositoryImpl implements StudentRepository {
   }
 
   @override
-  Future<ResultDart<File, Unit>> getUserUniLogo() async => _fetchAndCacheImage(StorageKeys.uniLogo, () {
+  Future<ResultDart<File, Unit>> getUserUniLogo() async =>
+      _fetchAndCacheImage(StorageKeys.uniLogo, () {
         SessionToken sessionToken = _getUserSession();
-        return _progressAPI.fetchUniversityLogo(sessionToken.token, sessionToken.etablissementId.toString());
+        return _progressAPI.fetchUniversityLogo(
+            sessionToken.token, sessionToken.etablissementId.toString());
       });
 
   @override
-  Future<ResultDart<File, Unit>> getUserImage() => _fetchAndCacheImage(StorageKeys.studentImage, () {
+  Future<ResultDart<File, Unit>> getUserImage() =>
+      _fetchAndCacheImage(StorageKeys.studentImage, () {
         SessionToken sessionToken = _getUserSession();
         return _progressAPI.fetchUserImage(sessionToken.uuid, sessionToken.token);
       });
@@ -88,7 +93,10 @@ class UserRepositoryImpl implements StudentRepository {
   Future<ResultDart<List<Group>, String>> getStudentGroups() async {
     if (_preferences.containsKey(StorageKeys.studentGroups)) {
       var thejasn = jsonDecode(_preferences.getString(StorageKeys.studentGroups)!);
-      return (thejasn as List).map((e) => StudentGroupEntity.fromJson(e).toGroup()).toList().toSuccess();
+      return (thejasn as List)
+          .map((e) => StudentGroupEntity.fromJson(e).toGroup())
+          .toList()
+          .toSuccess();
     }
     final theid = await _getStudentSemesterIds();
     if (theid.isError()) return theid.exceptionOrNull()!.toFailure();
@@ -123,38 +131,52 @@ class UserRepositoryImpl implements StudentRepository {
   }
 
   @override
-  Future<List<ResultDart<List<ExamNotes>, String>>> getStudentNotes() async {
+  Future<ResultDart<List<List<ExamNotes>>, String>> getStudentNotes() async {
     if (_preferences.containsKey(StorageKeys.studentNotes)) {
       final cachedString = _preferences.getString(StorageKeys.studentNotes)!;
-      final jason = jsonDecode(cachedString);
 
-      if (jason is List<List<Map<String, dynamic>>>) {
-        return jason.map((exams) {
-          return exams
-              .map((exam) {
-                return StudentNotesEntity.fromJson(exam).toNotes();
-              })
-              .toList()
-              .toSuccess<String>();
-        }).toList();
+      List<List<ExamNotes>>? tryParseCachedNotes(String notes) {
+        try {
+          final jason = jsonDecode(cachedString);
+          if (jason is List<dynamic>) {
+            return jason
+                .map((exams) {
+                  return exams.map((exam) {
+                    return StudentNotesEntity.fromJson(exam).toNotes();
+                  }).toList();
+                })
+                .toList()
+                .cast();
+          } else {
+            return null;
+          }
+        } catch (e) {
+          return null;
+        }
       }
+
+      final parsedNotes = tryParseCachedNotes(cachedString);
+      if (parsedNotes != null) return parsedNotes.toSuccess();
     }
+
     final theid = await _getStudentSemesterIds();
-    if (theid.isError()) return [theid.exceptionOrNull()!.toFailure()];
+    if (theid.isError()) return theid.exceptionOrNull()!.toFailure();
 
     final data = await _progressAPI.fetchStudentGrades(_getUserSession().token, theid.getOrThrow());
-    return data.map((e) {
-      final ResultDart<List<ExamNotes>, String> result = e.fold(
-        (success) {
-          var decoded = jsonDecode(_preferences.getString(StorageKeys.studentNotes) ?? "[]");
-          if (decoded is! List) decoded = [decoded];
-          decoded.add(success.toList());
-          _preferences.setString(StorageKeys.studentNotes, decoded.toString());
-          return success.map((e) => e.toNotes()).toList(growable: false).toSuccess();
-        },
-        (error) => error.toFailure(),
-      );
-      return result;
-    }).toList();
+
+    return data.fold<ResultDart<List<List<ExamNotes>>, String>>(
+      (notes) {
+        _preferences.setString(StorageKeys.studentNotes, jsonEncode(notes).toString());
+        return notes
+            .map<List<ExamNotes>>(
+              (notesList) {
+                return notesList.map((note) => note.toNotes()).toList();
+              },
+            )
+            .toList()
+            .toSuccess();
+      },
+      (error) => error.toFailure(),
+    );
   }
 }

@@ -23,7 +23,8 @@ class StudentNotesEntity {
 
   StudentNotesEntity();
 
-  factory StudentNotesEntity.fromJson(Map<String, dynamic> json) => $StudentNotesEntityFromJson(json);
+  factory StudentNotesEntity.fromJson(Map<String, dynamic> json) =>
+      $StudentNotesEntityFromJson(json);
 
   Map<String, dynamic> toJson() => $StudentNotesEntityToJson(this);
 
@@ -32,5 +33,6 @@ class StudentNotesEntity {
     return jsonEncode(this);
   }
 
-  ExamNotes toNotes() => ExamNotes(subject: mcLibelleFr, coefficient: rattachementMcCoefficient, grade: noteExamen);
+  ExamNotes toNotes() =>
+      ExamNotes(subject: mcLibelleFr, coefficient: rattachementMcCoefficient, grade: noteExamen);
 }

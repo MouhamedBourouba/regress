@@ -36,7 +36,8 @@ class StudentBacInfoResponseV2Entity {
 
   StudentBacInfoResponseV2Entity();
 
-  factory StudentBacInfoResponseV2Entity.fromJson(Map<String, dynamic> json) => $StudentBacInfoResponseV2EntityFromJson(json);
+  factory StudentBacInfoResponseV2Entity.fromJson(Map<String, dynamic> json) =>
+      $StudentBacInfoResponseV2EntityFromJson(json);
 
   Map<String, dynamic> toJson() => $StudentBacInfoResponseV2EntityToJson(this);
 

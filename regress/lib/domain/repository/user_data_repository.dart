@@ -13,12 +13,12 @@ abstract class StudentRepository {
   bool isAuthenticated();
 
   Future<ResultDart<Student, String>> getStudentData();
-  
-  Future<List<ResultDart<List<ExamNotes>, String>>> getStudentNotes();
+
+  Future<ResultDart<List<List<ExamNotes>>, String>> getStudentNotes();
 
   Future<ResultDart<File, Unit>> getUserImage();
 
   Future<ResultDart<File, Unit>> getUserUniLogo();
-  
+
   Future<ResultDart<List<Group>, String>> getStudentGroups();
 }

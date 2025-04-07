@@ -16,7 +16,8 @@ class StudentGroupEntity {
 
   StudentGroupEntity();
 
-  factory StudentGroupEntity.fromJson(Map<String, dynamic> json) => $StudentGroupEntityFromJson(json);
+  factory StudentGroupEntity.fromJson(Map<String, dynamic> json) =>
+      $StudentGroupEntityFromJson(json);
 
   Map<String, dynamic> toJson() => $StudentGroupEntityToJson(this);
 

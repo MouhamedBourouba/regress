@@ -27,7 +27,13 @@ class _HomeScreenState extends State<HomeScreen> {
     StudentProfileScreen()
   ];
 
-  final List<String> _titles = ["Groups and sections", "Exam Notes", "Assessments", "Subjects", "Profile"];
+  final List<String> _titles = [
+    "Groups and sections",
+    "Exam Notes",
+    "Assessments",
+    "Subjects",
+    "Profile"
+  ];
 
   @override
   Widget build(BuildContext context) {
