@@ -5,16 +5,62 @@ import 'package:provider/provider.dart';
 import 'package:regress/domain/models/group.dart';
 import 'package:regress/ui/providers/user_provider.dart';
 
-class GroupScreen extends StatefulWidget {
+class GroupScreen extends StatelessWidget {
   const GroupScreen({super.key});
 
   @override
-  State<GroupScreen> createState() => _GroupScreenState();
-}
-
-class _GroupScreenState extends State<GroupScreen> {
-  @override
   Widget build(BuildContext context) {
+    buildGroup(Group group) {
+      return Card(
+        elevation: 6,
+        borderOnForeground: true,
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Section",
+                    style: Theme.of(context)
+                        .textTheme
+                        .labelLarge
+                        ?.copyWith(color: Colors.grey.shade700),
+                  ),
+                  Text(
+                    group.section,
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                ],
+              ),
+              Divider(color: Colors.grey),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Group",
+                    style: Theme.of(context)
+                        .textTheme
+                        .labelLarge
+                        ?.copyWith(color: Colors.grey.shade700),
+                  ),
+                  Text(
+                    group.number,
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                ],
+              ),
+              Divider(color: Colors.grey),
+            ],
+          ),
+        ),
+      );
+    }
+
     final provider = context.watch<UserProvider>();
 
     if (provider.loading) {
@@ -57,60 +103,13 @@ class _GroupScreenState extends State<GroupScreen> {
                   .map((e) => Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: SingleChildScrollView(
-                          child: _buildGroup(e),
+                          child: buildGroup(e),
                         ),
                       ))
                   .toList(),
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  _buildGroup(Group group) {
-    return Card(
-      elevation: 6,
-      borderOnForeground: true,
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Section",
-                  style:
-                      Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.grey.shade700),
-                ),
-                Text(
-                  group.section,
-                  style: Theme.of(context).textTheme.labelLarge,
-                ),
-              ],
-            ),
-            Divider(color: Colors.grey),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Group",
-                  style:
-                      Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.grey.shade700),
-                ),
-                Text(
-                  group.number,
-                  style: Theme.of(context).textTheme.labelLarge,
-                ),
-              ],
-            ),
-            Divider(color: Colors.grey),
-          ],
-        ),
       ),
     );
   }
