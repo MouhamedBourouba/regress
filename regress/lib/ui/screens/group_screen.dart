@@ -10,57 +10,6 @@ class GroupScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    buildGroup(Group group) {
-      return Card(
-        elevation: 6,
-        borderOnForeground: true,
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Section",
-                    style: Theme.of(context)
-                        .textTheme
-                        .labelLarge
-                        ?.copyWith(color: Colors.grey.shade700),
-                  ),
-                  Text(
-                    group.section,
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                ],
-              ),
-              Divider(color: Colors.grey),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Group",
-                    style: Theme.of(context)
-                        .textTheme
-                        .labelLarge
-                        ?.copyWith(color: Colors.grey.shade700),
-                  ),
-                  Text(
-                    group.number,
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                ],
-              ),
-              Divider(color: Colors.grey),
-            ],
-          ),
-        ),
-      );
-    }
-
     final provider = context.watch<UserProvider>();
 
     if (provider.loading) {
@@ -103,13 +52,60 @@ class GroupScreen extends StatelessWidget {
                   .map((e) => Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: SingleChildScrollView(
-                          child: buildGroup(e),
+                          child: buildGroup(e, context),
                         ),
                       ))
                   .toList(),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  buildGroup(Group group, context) {
+    return Card(
+      elevation: 6,
+      borderOnForeground: true,
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Section",
+                  style:
+                      Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.grey.shade700),
+                ),
+                Text(
+                  group.section,
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+              ],
+            ),
+            Divider(color: Colors.grey),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Group",
+                  style:
+                      Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.grey.shade700),
+                ),
+                Text(
+                  group.number,
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+              ],
+            ),
+            Divider(color: Colors.grey),
+          ],
+        ),
       ),
     );
   }
