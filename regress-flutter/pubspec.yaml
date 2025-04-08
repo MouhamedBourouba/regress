@@ -1,0 +1,33 @@
+name: regress
+description: "A reimagined progres"
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.6.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  provider:
+  cupertino_icons: ^1.0.8
+  result_dart: ^2.0.0
+  http:
+  get_it:
+  shared_preferences:
+  path_provider:
+  flutter_bloc: ^9.0.0
+  crypto: ^3.0.6
+  hive_flutter: ^1.1.0
+  dart_style: ^3.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/uni_logo.png
