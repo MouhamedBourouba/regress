@@ -36,6 +36,7 @@ class ModulesScreen extends StatelessWidget {
       itemBuilder: (context, index) {
         final module = modules[index];
         return Card(
+          elevation: 6,
           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Padding(
             padding: const EdgeInsets.all(16),
