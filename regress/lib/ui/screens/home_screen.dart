@@ -22,18 +22,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   int _currentIndex = 0;
   final List<Widget> _screens = [
+    ModulesScreen(),
     GroupScreen(),
     ExamNotesScreen(),
     Center(child: Text("Assessments")),
-    ModulesScreen(),
     StudentProfileScreen()
   ];
 
   final List<String> _titles = [
+    "Modules",
     "Groups and sections",
     "Exam Notes",
     "Assessments",
-    "Modules",
     "Profile"
   ];
 
@@ -54,6 +54,10 @@ class _HomeScreenState extends State<HomeScreen> {
         }),
         items: const [
           BottomNavigationBarItem(
+            icon: Icon(Icons.book),
+            label: "Modules",
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.group),
             label: "Groups",
           ),
@@ -64,10 +68,6 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.assessment),
             label: "Assessments",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.book),
-            label: "Modules",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
