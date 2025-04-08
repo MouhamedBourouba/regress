@@ -1,3 +1,0 @@
-# regress
-
-A reimagined progres
