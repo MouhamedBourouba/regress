@@ -19,7 +19,7 @@ class UserProvider extends ChangeNotifier {
   List<Group>? _studentGroups;
   File? _studentImage;
   File? _universityLogo;
-  List<ExamNotes>? _studentNotes;
+  List<List<ExamNotes>>? _studentNotes;
 
   bool get loading => _loading;
 
@@ -35,7 +35,7 @@ class UserProvider extends ChangeNotifier {
 
   List<Group>? get studentGroups => _studentGroups;
 
-  List<ExamNotes>? get studentNotes => _studentNotes;
+  List<List<ExamNotes>>? get studentNotes => _studentNotes?.reversed.toList();
 
   Future<void> loadData() async {
     final studentData = _userRepository.getStudentData();
@@ -60,10 +60,10 @@ class UserProvider extends ChangeNotifier {
       (failure) => _error = failure,
     );
 
-    // studentNotes.fold(
-    //   (success) => _studentNotes = success,
-    //   (failure) => _error = failure,
-    // );
+    studentNotes.fold(
+      (success) => _studentNotes = success,
+      (failure) => _error = failure,
+    );
 
     userImage.onSuccess(
       (success) {

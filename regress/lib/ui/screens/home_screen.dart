@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:regress/ui/providers/user_provider.dart';
+import 'package:regress/ui/screens/exam_notes.dart';
 import 'package:regress/ui/screens/group_screen.dart';
 import 'package:regress/ui/screens/profile_screen.dart';
 
@@ -21,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
   final List<Widget> _screens = [
     GroupScreen(),
-    Center(child: Text("Notes")),
+    ExamNotesScreen(),
     Center(child: Text("Assessments")),
     Center(child: Text("Subjects")),
     StudentProfileScreen()
