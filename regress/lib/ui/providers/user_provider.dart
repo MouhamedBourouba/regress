@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:regress/domain/models/exam_notes.dart';
 import 'package:regress/domain/models/group.dart';
+import 'package:regress/domain/models/module_coefficient.dart';
 import 'package:regress/domain/models/student.dart';
 import 'package:regress/domain/repository/user_data_repository.dart';
 import 'package:result_dart/result_dart.dart';
@@ -20,6 +21,7 @@ class UserProvider extends ChangeNotifier {
   File? _studentImage;
   File? _universityLogo;
   List<List<ExamNotes>>? _studentNotes;
+  List<ModuleCoefficient>? _moduleCoefficients;
 
   bool get loading => _loading;
 
@@ -37,44 +39,49 @@ class UserProvider extends ChangeNotifier {
 
   List<List<ExamNotes>>? get studentNotes => _studentNotes?.reversed.toList();
 
+  List<ModuleCoefficient>? get moduleCoefficients => _moduleCoefficients;
+
   Future<void> loadData() async {
     final studentData = _userRepository.getStudentData();
     final userImage = _userRepository.getUserImage();
     final studentGroups = _userRepository.getStudentGroups();
     final uniLogo = _userRepository.getUserUniLogo();
     final studentNotes = _userRepository.getStudentNotes();
+    final moduleCoefficients = _userRepository.getModuleCoefficients();
 
     await userImage;
     await uniLogo;
     await studentData;
     await studentGroups;
     await studentNotes;
+    await moduleCoefficients;
+
+    userImage.onSuccess(
+      (success) => _studentImage = success,
+    );
+
+    uniLogo.onSuccess(
+      (success) => _universityLogo = success,
+    );
 
     studentData.fold(
       (success) => _student = success,
-      (failure) => _error = failure,
+      (error) => _error = error,
     );
 
     studentGroups.fold(
       (success) => _studentGroups = success,
-      (failure) => _error = failure,
+      (error) => _error = error,
     );
 
     studentNotes.fold(
       (success) => _studentNotes = success,
-      (failure) => _error = failure,
+      (error) => _error = error,
     );
 
-    userImage.onSuccess(
-      (success) {
-        _studentImage = success;
-      },
-    );
-
-    uniLogo.onSuccess(
-      (success) {
-        _universityLogo = success;
-      },
+    moduleCoefficients.fold(
+      (success) => _moduleCoefficients = success,
+      (error) => _error = error,
     );
 
     _loading = false;

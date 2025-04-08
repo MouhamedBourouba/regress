@@ -5,6 +5,7 @@ class StorageKeys {
   static const studentGroups = "student_groups";
   static const sessionToken = "session_key";
   static const studentNotes = "student_exam_notes";
+  static const moduleCoefficients = "module_coefficients";
 
   static List<String> get keys => [uniLogo, studentImage, sessionToken, studentData];
 }

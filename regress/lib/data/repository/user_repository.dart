@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:regress/data/constants.dart';
+import 'package:regress/data/models/coefficient_entity.dart';
 import 'package:regress/data/models/session_token.dart';
 import 'package:regress/data/models/student_bac_info_response_v2_entity.dart';
 import 'package:regress/data/models/student_group_entity.dart';
@@ -9,6 +10,7 @@ import 'package:regress/data/models/student_notes_entity.dart';
 import 'package:regress/data/sources/progress_api.dart';
 import 'package:regress/domain/models/exam_notes.dart';
 import 'package:regress/domain/models/group.dart';
+import 'package:regress/domain/models/module_coefficient.dart';
 import 'package:regress/domain/models/student.dart';
 import 'package:regress/domain/repository/user_data_repository.dart';
 import 'package:result_dart/result_dart.dart';
@@ -173,6 +175,46 @@ class UserRepositoryImpl implements StudentRepository {
             )
             .toList()
             .toSuccess();
+      },
+      (error) => error.toFailure(),
+    );
+  }
+
+  @override
+  Future<ResultDart<List<ModuleCoefficient>, String>> getModuleCoefficients() async {
+    if (_preferences.containsKey(StorageKeys.moduleCoefficients)) {
+      final cachedData = _preferences.getString(StorageKeys.moduleCoefficients)!;
+      final List<dynamic> jsonList = jsonDecode(cachedData);
+      return jsonList
+          .map((json) => CoefficientEntity.fromJson(json).toModuleCoefficient())
+          .toList()
+          .toSuccess();
+    }
+
+    if (!_preferences.containsKey(StorageKeys.studentData)) {
+      final result = await getStudentData();
+      if (result.isError()) {
+        return result.exceptionOrNull()!.toFailure();
+      }
+    }
+
+    final studentData = jsonDecode(_preferences.getString(StorageKeys.studentData)!);
+    final data = studentData is List ? studentData.last : studentData;
+    
+    final formationId = data['ouvertureOffreFormationId'];
+    final niveauId = data['niveauId'];
+    
+    final sessionToken = _getUserSession();
+    final result = await _progressAPI.fetchModuleCoefficients(
+      sessionToken.token,
+      formationId,
+      niveauId,
+    );
+
+    return result.fold(
+      (success) {
+        _preferences.setString(StorageKeys.moduleCoefficients, jsonEncode(success));
+        return success.map((e) => e.toModuleCoefficient()).toList().toSuccess();
       },
       (error) => error.toFailure(),
     );

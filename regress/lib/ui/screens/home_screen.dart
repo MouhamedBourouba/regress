@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:regress/ui/providers/user_provider.dart';
 import 'package:regress/ui/screens/exam_notes.dart';
 import 'package:regress/ui/screens/group_screen.dart';
+import 'package:regress/ui/screens/modules_screen.dart';
 import 'package:regress/ui/screens/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -24,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
     GroupScreen(),
     ExamNotesScreen(),
     Center(child: Text("Assessments")),
-    Center(child: Text("Subjects")),
+    ModulesScreen(),
     StudentProfileScreen()
   ];
 
@@ -32,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
     "Groups and sections",
     "Exam Notes",
     "Assessments",
-    "Subjects",
+    "Modules",
     "Profile"
   ];
 
@@ -51,13 +52,13 @@ class _HomeScreenState extends State<HomeScreen> {
         onTap: (value) => setState(() {
           _currentIndex = value;
         }),
-        items: [
+        items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.groups),
+            icon: Icon(Icons.group),
             label: "Groups",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.grade),
+            icon: Icon(Icons.assignment),
             label: "Notes",
           ),
           BottomNavigationBarItem(
@@ -65,11 +66,11 @@ class _HomeScreenState extends State<HomeScreen> {
             label: "Assessments",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.subject),
-            label: "Subjects",
+            icon: Icon(Icons.book),
+            label: "Modules",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
+            icon: Icon(Icons.person),
             label: "Profile",
           ),
         ],

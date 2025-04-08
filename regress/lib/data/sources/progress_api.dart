@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:regress/data/models/coefficient_entity.dart';
 import 'package:regress/data/models/session_token.dart';
 import 'package:regress/data/models/student_bac_info_response_v2_entity.dart';
 import 'package:regress/data/models/student_group_entity.dart';
@@ -120,6 +121,26 @@ class ProgressAPI {
     }
 
     return notesList.toSuccess<String>();
+  }
+
+  Future<ResultDart<List<CoefficientEntity>, String>> fetchModuleCoefficients(
+    String jwtToken,
+    int offreFormationId,
+    int niveauId,
+  ) async {
+    return _get(
+      jwtToken,
+      "offreFormation/$offreFormationId/niveau/$niveauId/Coefficients",
+    ).fold(
+      (response) {
+        final List<dynamic> jsonList = json.decode(utf8.decode(response.bodyBytes));
+        return jsonList
+            .map((json) => CoefficientEntity.fromJson(json))
+            .toList()
+            .toSuccess();
+      },
+      (error) => error.toFailure(),
+    );
   }
 
   // https://progres.mesrs.dz/api/authentication/v1/
